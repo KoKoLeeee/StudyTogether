@@ -6,7 +6,6 @@
         <ul>
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/listings">Listings</router-link></li>
-          <li><router-link to="/bookings">Bookings</router-link></li>
           <li v-if="loggedIn"><router-link v-on:click.native="signOut" to="/">Logout</router-link></li>
           <li v-else><router-link to="/login">Login</router-link></li>
         </ul>
