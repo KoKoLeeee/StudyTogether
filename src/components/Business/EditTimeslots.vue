@@ -393,19 +393,18 @@ export default {
         var time = this.selected[i]["time"];
         console.log("update: " + time);
         var updatedValue = this.pax;
-        this.selected[i]["pax"] = updatedValue
-        docRef
-          .update({
-            [time]: updatedValue, //update the firebase
-          })
-          // .then(() => location.reload());
+        this.selected[i]["pax"] = updatedValue;
+        docRef.update({
+          [time]: updatedValue, //update the firebase
+        });
+        // .then(() => location.reload());
       }
-      this.pax = ""
+      this.pax = "";
       this.selected = new Array();
     },
 
     del: function () {
-      //delete timeslots
+      //gi timeslots
 
       if (this.selected.length == 0) {
         alert("Please select at least 1 timeslot");
@@ -422,13 +421,12 @@ export default {
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i]["time"];
         console.log("delete: " + time);
-        var index = this.timeslots.indexOf(this.selected[i])
-        this.timeslots.splice(index,1)
-        docRef
-          .update({
-            [time]: FieldValue.delete(), //delete field in firebase
-          })
-          // .then(() => location.reload());
+        var index = this.timeslots.indexOf(this.selected[i]);
+        this.timeslots.splice(index, 1);
+        docRef.update({
+          [time]: FieldValue.delete(), //delete field in firebase
+        });
+        // .then(() => location.reload());
       }
       this.selected = new Array();
     },
