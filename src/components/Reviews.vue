@@ -220,162 +220,173 @@ export default {
         });
     },
 
-	updateData: async function () {
-		const locationID = this.$route.params.id
-		var monthString = this.$route.query.date;
-		console.log(monthString)
-		var someArr = []
-		await database
-			.collection('listings')
-			.doc(this.$route.params.id)
-			.collection('monthlyData')
-			.doc(monthString)
-			.get()
-			.then(querySnapshot => {
-				console.log("checking...")
-				if(!querySnapshot.exists) {
-					console.log("its empty")
-					database
-						.collection('listings')
-						.doc(locationID)
-						.collection('monthlyData')
-						.doc(monthString)
-						.set({
-							month: monthString,
-							bookings: Number(0),
-							clicks: Number(0),
-							revenue: Number(0),
-							ratings: Number(0),
-							totalRatings: Number(0),
-							numRatings: Number(0)
-						}) 
-				}
-				console.log(querySnapshot.id, "=>", querySnapshot.data())
-				let data = {...querySnapshot.data(), ['id']: querySnapshot.id}
-				someArr.push(data)
-			})
-			
-			console.log(someArr)
-			return someArr
-		},
+    updateData: async function () {
+      const locationID = this.$route.params.id;
+      var monthString = this.$route.query.date;
+      console.log(monthString);
+      var someArr = [];
+      await database
+        .collection("listings")
+        .doc(this.$route.params.id)
+        .collection("monthlyData")
+        .doc(monthString)
+        .get()
+        .then((querySnapshot) => {
+          console.log("checking...");
+          if (!querySnapshot.exists) {
+            console.log("its empty");
+            database
+              .collection("listings")
+              .doc(locationID)
+              .collection("monthlyData")
+              .doc(monthString)
+              .set({
+                month: monthString,
+                bookings: Number(0),
+                clicks: Number(0),
+                revenue: Number(0),
+                ratings: Number(0),
+                totalRatings: Number(0),
+                numRatings: Number(0),
+              });
+          }
+          console.log(querySnapshot.id, "=>", querySnapshot.data());
+          let data = { ...querySnapshot.data(), ["id"]: querySnapshot.id };
+          someArr.push(data);
+        });
 
-        send: async function(e) {
-			e.preventDefault();
-			if (
-				this.title == "" ||
-				this.comment == "" ||
-				this.noise == 0 ||
-				this.rating == 0
-			) {
-       	 	return;
-			}
-			const locationId = this.$route.params.id
-            const userId = firebase.auth().currentUser.uid
-			const docId = this.$route.query.doc_id;
+      console.log(someArr);
+      return someArr;
+    },
 
-			async function retrieveUser(idOfUser) {
-				var username = "";
-				await database
-				.collection("users")
-				.doc(idOfUser)
-				.get()
-				.then((doc) => {
-					let data = doc.data();
-					username = data["name"];
-				});
-				return username;
-			}
-			let username = await retrieveUser(userId);
+    send: async function (e) {
+      e.preventDefault();
+      if (
+        this.title == "" ||
+        this.comment == "" ||
+        this.noise == 0 ||
+        this.rating == 0
+      ) {
+        return;
+      }
+      const locationId = this.$route.params.id;
+      const userId = firebase.auth().currentUser.uid;
+      const docId = this.$route.query.doc_id;
 
-            database.collection('listings').doc(locationId).collection('reviews').add({
-                title: this.title,
-                comments: this.comment,
-                noise: Number(this.noise),
-                rating: Number(this.rating),
-                userid: userId,
-                user: username,
-				date: new Date()
+      async function retrieveUser(idOfUser) {
+        var username = "";
+        await database
+          .collection("users")
+          .doc(idOfUser)
+          .get()
+          .then((doc) => {
+            let data = doc.data();
+            username = data["name"];
+          });
+        return username;
+      }
+      let username = await retrieveUser(userId);
+
+      database
+        .collection("listings")
+        .doc(locationId)
+        .collection("reviews")
+        .add({
+          title: this.title,
+          comments: this.comment,
+          noise: Number(this.noise),
+          rating: Number(this.rating),
+          userid: userId,
+          user: username,
+          date: new Date(),
+        });
+
+      database
+        .collection("bookings")
+        .doc(docId)
+        .delete()
+        .then(() => console.log("review sent and past booking deleted"));
+
+      // get month doc id and currbookings and currrevenue
+      var monthString = this.$route.query.date;
+      console.log(monthString);
+
+      var result = await this.updateData();
+      console.log(result);
+
+      var currNumRatings = Number(0);
+      var currTotalRatings = Number(0);
+      var currRatings = Number(0);
+
+      result.forEach((doc) => {
+        currNumRatings += Number(doc.numRatings);
+        currTotalRatings += Number(doc.totalRatings);
+        currRatings += Number(doc.ratings);
+        this.monthID += doc.id;
+        console.log(doc.id);
+      });
+
+      console.log("currentRatings", currRatings);
+      var locationID = this.$route.params.id;
+      console.log(locationID);
+      console.log("month", this.monthID);
+
+      var newNumRatings = Number(Number(currNumRatings) + 1);
+
+      var newRatingTotal = Number(
+        Number(currTotalRatings) + Number(this.rating)
+      );
+      var newAvgRating = Number(
+        Math.round((Number(newRatingTotal) / Number(newNumRatings)) * 2) / 2
+      );
+      console.log("new rating", newAvgRating);
+
+      await database
+        .collection("listings")
+        .doc(locationID)
+        .collection("monthlyData")
+        .doc(this.monthID)
+        .update({
+          ratings: Number(newAvgRating),
+          numRatings: Number(newNumRatings),
+          totalRatings: Number(newRatingTotal),
+        });
+
+      await database
+        .collection("listings")
+        .doc(locationID)
+        .get()
+        .then((snapshot) => {
+          const toUpdate = snapshot.data();
+          var newNumRatings = Number(Number(toUpdate.numRatings) + 1);
+          var newRatingTotal = Number(
+            Number(toUpdate.totalRating) + Number(this.rating)
+          );
+          var newAvgRating =
+            Math.round((Number(newRatingTotal) / Number(newNumRatings)) * 2) /
+            2;
+          var newNoiseTotal = Number(
+            Number(toUpdate.totalNoise) + Number(this.noise)
+          );
+          var newAvgNoise = Number(
+            Math.round(Number(newNoiseTotal) / Number(newNumRatings))
+          );
+          console.log(newNoiseTotal);
+          console.log(newAvgNoise);
+          database
+            .collection("listings")
+            .doc(locationID)
+            .update({
+              rating: newAvgRating,
+              totalRating: newRatingTotal,
+              numRatings: newNumRatings,
+              noise: newAvgNoise,
+              totalNoise: newNoiseTotal,
             })
-
-			database.collection('bookings').doc(docId).delete().then(() => console.log('review sent and past booking deleted'))
-			
-			// get month doc id and currbookings and currrevenue
-			var monthString = this.$route.query.date
-			console.log(monthString)
-				
-			var result = await this.updateData()
-			console.log(result)
-
-			var currNumRatings = Number(0)
-			var currTotalRatings = Number(0)
-			var currRatings = Number(0)
-
-			result.forEach(doc => {
-        		currNumRatings += Number(doc.numRatings)
-        		currTotalRatings += Number(doc.totalRatings)
-				currRatings += Number(doc.ratings)
-        		this.monthID += doc.id
-        		console.log(doc.id)
-      		})
-			
-			console.log("currentRatings", currRatings)
-			var locationID = this.$route.params.id;
-			console.log(locationID)
-			console.log("month", this.monthID)
-
-			var newNumRatings = Number(Number(currNumRatings) + 1);
-
-			var newRatingTotal = Number(Number(currTotalRatings) + Number(this.rating));
-			var newAvgRating = Number(Math.round((Number(newRatingTotal) / Number(newNumRatings))*2) / 2);
-			console.log("new rating", newAvgRating)
-			
-
-			await database
-				.collection("listings")
-				.doc(locationID)
-				.collection("monthlyData")
-				.doc(this.monthID)
-				.update({
-				ratings: Number(newAvgRating),
-				numRatings: Number(newNumRatings),
-				totalRatings: Number(newRatingTotal),
-				});
-
-			await database
-				.collection("listings")
-				.doc(locationID)
-				.get()
-				.then((snapshot) => {
-				const toUpdate = snapshot.data();
-				var newNumRatings = Number(Number(toUpdate.numRatings) + 1);
-				var newRatingTotal = Number(
-					Number(toUpdate.totalRating) + Number(this.rating)
-				);
-				var newAvgRating =
-					Math.round((Number(newRatingTotal) / Number(newNumRatings)) * 2) /
-					2;
-				var newNoiseTotal = Number(
-					Number(toUpdate.totalNoise) + Number(this.noise)
-				);
-				var newAvgNoise = Number(
-					Math.round(Number(newNoiseTotal) / Number(newNumRatings))
-				);
-				console.log(newNoiseTotal);
-				console.log(newAvgNoise);
-				database
-					.collection("listings")
-					.doc(locationID)
-					.update({
-					rating: newAvgRating,
-					totalRating: newRatingTotal,
-					numRatings: newNumRatings,
-					noise: newAvgNoise,
-					totalNoise: newNoiseTotal,
-					})
-					.then(this.$router.push({ path: "/bookings" }));
-				});
-		},
-	},
+            .then(this.$router.push({ path: "/bookings" }));
+        });
+    },
+  },
 
   created: function () {
     this.fetchItems();
