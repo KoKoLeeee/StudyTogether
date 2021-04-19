@@ -18,13 +18,14 @@
                 <p>
                   Last Message:
                   {{
-                    chat['newDate']
-                      .toLocaleString("default", { month: "short" }) +
+                    chat["newDate"].toLocaleString("default", {
+                      month: "short",
+                    }) +
                     " " +
-                    chat['newDate'].getDate()
+                    chat["newDate"].getDate()
                   }}
                   |
-                  {{ chat['newDate'].toTimeString().split(" ")[0] }}
+                  {{ chat["newDate"].toTimeString().split(" ")[0] }}
                 </p>
               </div>
               <p>{{ chat["last_user"] }}: {{ chat["last_message"] }}</p>
@@ -46,18 +47,19 @@
                     <p class="right-content">{{ message.message }}</p>
                     <p class="small-date">
                       {{
-                        message['newDate']
-                          .toLocaleString("default", { month: "short" }) +
+                        message["newDate"].toLocaleString("default", {
+                          month: "short",
+                        }) +
                         " " +
-                        message['newDate'].getDate()
+                        message["newDate"].getDate()
                       }}
                       |
-                      {{ message['newDate'].toTimeString().split(" ")[0] }}
+                      {{ message["newDate"].toTimeString().split(" ")[0] }}
                     </p>
                   </div>
-                  <div class="middle" v-else-if="message.sender =='System'">
-                      {{message.message}}
-                      </div>
+                  <div class="middle" v-else-if="message.sender == 'System'">
+                    {{ message.message }}
+                  </div>
                   <div class="left" v-else>
                     <p class="left-content">
                       {{ message.message }}
@@ -120,7 +122,7 @@ export default {
   computed: {
     displayed_userlist: function () {
       let array = this.userlist;
-      return array.sort((a,b) => b['newDate'] - a['newDate'])
+      return array.sort((a, b) => b["newDate"] - a["newDate"]);
     },
   },
 
@@ -159,10 +161,10 @@ export default {
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
-                  let toAdd = doc.data()
-                  let newDate = toAdd.last_date.toDate()
+                let toAdd = doc.data();
+                let newDate = toAdd.last_date.toDate();
                 let item = { ...toAdd, ["id"]: doc.id, ["newDate"]: newDate };
-                console.log(newDate)
+                console.log(newDate);
                 this.userlist.push(item);
               });
             });
@@ -196,7 +198,6 @@ export default {
       let doc_id = event.currentTarget.getAttribute("id");
       console.log(doc_id);
 
-
       await database
         .collection("chatrooms")
         .doc(doc_id)
@@ -205,9 +206,9 @@ export default {
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-              let toAdd = doc.data()
-              let newDate = toAdd.time.toDate()
-            let item = { ...doc.data(), ['newDate']: newDate };
+            let toAdd = doc.data();
+            let newDate = toAdd.time.toDate();
+            let item = { ...doc.data(), ["newDate"]: newDate };
             this.messages.push(item);
           });
         });
@@ -229,7 +230,14 @@ export default {
     },
 
     sendMessage: async function () {
-      let item = { sender: this.userID, message: this.text, newDate: new Date() };
+      if (this.text == "") {
+        return;
+      }
+      let item = {
+        sender: this.userID,
+        message: this.text,
+        newDate: new Date(),
+      };
       console.log(item);
 
       console.log(this.userlist);
@@ -248,7 +256,7 @@ export default {
       this.messages.push(item);
       let itemToUpdate = this.userlist[this.index];
       console.log(itemToUpdate);
-      console.log(itemToUpdate.newDate)
+      console.log(itemToUpdate.newDate);
       itemToUpdate.newDate = item.newDate;
       itemToUpdate.last_message = item.message;
       if (this.usertype == "customer") {
@@ -418,8 +426,7 @@ ul {
 }
 
 .small-date {
-    margin-bottom: 0px;
-    padding-top: 1px;
-
+  margin-bottom: 0px;
+  padding-top: 1px;
 }
 </style>
