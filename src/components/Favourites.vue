@@ -15,12 +15,13 @@
               class="button"
               variant="outline-danger"
               v-bind:index="index"
+              v-bind:id="listing.id"
               v-on:click="remove($event)"
               >Remove</b-button
             >
           </div>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique saepe reprehenderit, iure animi necessitatibus reiciendis 
+            {{ listing.description }} 
           </p>
         </div>
         <!-- <div id="name">
@@ -154,7 +155,9 @@ export default {
       //console.log(doc_id);
       this.idList.splice(doc_index, 1);
       **/
-      let doc_id = event.target.getAttribute("index");
+      let index = event.currentTarget.getAttribute("index");
+      this.list.splice(index,1)
+      let doc_id = event.currentTarget.getAttribute("id")
       console.log(doc_id);
       var newList = [];
       for (var k = 0; k < this.idList.length; k++) {
@@ -173,7 +176,7 @@ export default {
         .collection("users")
         .doc(user.uid)
         .update({ favourites: this.idList })
-        .then(() => {location.reload()});
+        .then();
         //.get()
         //.then((snapshot) => {
           //const data = snapshot.data();

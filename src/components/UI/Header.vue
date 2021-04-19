@@ -5,9 +5,10 @@
         <strong><h1>Study Together</h1></strong>
         <ul>
           <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/listings" v-if="loggedIn != 'owner'">Listings</router-link></li>
+          <li v-if="loggedIn != 'owner'"><router-link to="/listings">Listings</router-link></li>
           <li v-if="loggedIn == 'customer'"><router-link to="/bookings">Bookings</router-link></li>
           <li v-if="loggedIn == 'customer'"><router-link to="/favourites">Favourites</router-link></li>
+          <li v-if="loggedIn != 'none'"><router-link to="/chat">Chats</router-link></li>
           <li v-if="loggedIn == 'customer'"><router-link to="/userChart">My Stats</router-link></li>
           <li v-if="loggedIn == 'owner'"><router-link to ="/bizdashboard">Business Stats</router-link></li>
           <li v-if="loggedIn == 'owner'"><router-link :to="{path: '/listings/' + this.userID }">My Listings</router-link></li>
