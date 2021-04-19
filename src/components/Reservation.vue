@@ -3,7 +3,7 @@
     <app-header></app-header>
 
     <div>
-      <p class="title">Make A Reservation</p>
+      <h1 class="title">Make A Reservation</h1>
     </div>
     <div class="float-container">
       <form class="form">
@@ -24,7 +24,7 @@
             ></v-date-picker>
             <br />
             <br />
-            <button class="submit" type="submit" v-on:click="submit">
+            <button class="submit" type="submit" v-on:click="submit" v-if="dateSelected && availableTime && selected.length != 0">
               Submit
             </button>
             <br />
@@ -33,12 +33,12 @@
         </div>
 
         <div class="float-right">
-          <div class="timeslot">
+          <div class="timeslot"  v-if="dateSelected && availableTime">
             <br />
             <label for="time">Timeslot: </label>
             <br />
             <br />
-            <div v-if="dateSelected && availableTime">
+            <div>
               <label class="container" v-for="item in timeslot" :key="item"
                 >{{ item }}
                 <input type="checkbox" v-bind:value="item" v-model="selected" />
@@ -398,6 +398,17 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 40px;
+  margin-bottom: 15px;
+  width: 30%;
+  margin:auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 2px solid grey;
+  margin-bottom: 35px;
+}
 /* Customize the label (the container) */
 .container {
   display: block;
@@ -476,34 +487,39 @@ select {
 
 .float-container {
   display: flex;
+  
   align-items: center;
-  width: 60%;
+  width: 70%;
   margin: auto;
 }
 
-.float-left,
+/* .float-left,
 .float-right {
   flex: 1;
   height: 100%;
   overflow: auto;
-}
+} */
 
 .float-left {
+  width: 50%;
   float: left;
   align-items: left;
-  background-color: #ffffff;
-  border-radius: 20px;
+  /* background-color: #ffffff; */
+  /* border-radius: 20px; */
   margin-left: 5px;
-  box-shadow: 0px 0px 10px 10px lightgrey;
+  /* box-shadow: 0px 0px 10px 10px lightgrey; */
 }
 
 .float-right {
+  width: 50%;
   margin-left: 30px;
   float: right;
   align-items: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0px 0px 10px 10px lightgrey;
+  height: 60vh;
+  border-left: 2px solid grey;
+  /* background-color: #ffffff; */
+  /* border-radius: 20px; */
+  /* box-shadow: 0px 0px 10px 10px lightgrey; */
 }
 
 .timeslot {
@@ -513,8 +529,8 @@ select {
 }
 
 .container {
-  width: 30%;
-  text-align: left;
+  width: 50%;
+  text-align: center;
   margin-left: auto;
 }
 
