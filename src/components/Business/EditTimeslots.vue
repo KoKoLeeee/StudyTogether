@@ -405,7 +405,7 @@ export default {
     },
 
     del: function () {
-      //delete timeslots
+      //gi timeslots
 
       if (this.selected.length == 0) {
         alert("Please select at least 1 timeslot");

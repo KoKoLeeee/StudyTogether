@@ -15,6 +15,7 @@ import BizBookings from './components/Business/Biz Bookings.vue';
 import Information from './components/Business/Information.vue';
 import EditTimeslots from './components/Business/EditTimeslots.vue';
 import BizDashboard from './components/Business/Dashboard/BizDashboard.vue'
+import ChatRoom from './components/ChatRoom.vue';
 
 
 export default [
@@ -45,10 +46,10 @@ export default [
 		path: "/bookings",
 		component: Bookings,
 	},
-	{ 
-        path: "/userChart",
-        component: userChart 
-    },
+	{
+		path: "/userChart",
+		component: userChart
+	},
 	{
 		path: "/forgotpassword",
 		component: ForgotPassword,
@@ -110,9 +111,14 @@ export default [
 		props: true,
 		meta: { auth: "owner" },
 	},
-    {   
-        path: '/bizdashboard', 
-        component: BizDashboard,
-        meta: { auth: 'owner' }
-    }
+	{
+		path: '/bizdashboard',
+		component: BizDashboard,
+		meta: { auth: 'owner' }
+	},
+
+	{
+		path: '/chat',
+		component: ChatRoom
+	}
 ];

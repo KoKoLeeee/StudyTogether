@@ -11,7 +11,11 @@
         fixed-height="300px"
         autoplay
       >
-        <vueper-slide v-for="(photo, index) in listingDetails.photos" :image="photo" :key="index"/>
+        <vueper-slide
+          v-for="(photo, index) in listingDetails.photos"
+          :image="photo"
+          :key="index"
+        />
 
         <!-- <img class="place" v-bind:src = "listingDetails.photoURL1">
                 <img class="place" v-bind:src = "listingDetails.photoURL2">
@@ -23,7 +27,7 @@
       <h1>{{ listingDetails.name }}</h1>
     </div>
     <div class="description">
-        {{ listingDetails.description }}
+      {{ listingDetails.description }}
     </div>
     <div class="details">
       <div class="float-container">
@@ -103,6 +107,7 @@
         </div>
         <div class="float-right">
           <button class="book" v-on:click="bookPage()">Book Now!</button>
+          <button class="book" v-on:click="openChat()">Inquire more</button>
         </div>
       </div>
       <div class="second-row">
@@ -127,7 +132,11 @@
           :arrows-outside="true"
           fixed-height="450px"
         >
-          <vueper-slide v-for="(menu, index) in listingDetails.menu" :image="menu" :key="index"/>
+          <vueper-slide
+            v-for="(menu, index) in listingDetails.menu"
+            :image="menu"
+            :key="index"
+          />
 
           <!-- <img class="place" v-bind:src = "listingDetails.photoURL1">
                 <img class="place" v-bind:src = "listingDetails.photoURL2">
@@ -170,7 +179,10 @@
         <div v-if="reviews.length != 0">
           <ul class="review-list">
             <li v-for="commentIndex in commentsToShow" :key="commentIndex">
-              <div class="indiv-review" v-if="commentIndex <= displayedList.length">
+              <div
+                class="indiv-review"
+                v-if="commentIndex <= displayedList.length"
+              >
                 <div class="review-title">
                   <h5>{{ displayedList[commentIndex - 1].title }}</h5>
                   <div class="review-ratings">
@@ -304,12 +316,12 @@
                   </div>
                 </div>
                 <div class="review-comment">
-                    <p>
-                  {{ displayedList[commentIndex - 1].comments }}
+                  <p>
+                    {{ displayedList[commentIndex - 1].comments }}
                   </p>
                 </div>
                 <div class="review-author">
-                    - {{ displayedList[commentIndex - 1].user }}
+                  - {{ displayedList[commentIndex - 1].user }}
                 </div>
                 <!-- <div class="noiseLvl">
                   Noise:
@@ -408,10 +420,10 @@ export default {
       ascending: true,
     };
   },
- computed: {
+  computed: {
     displayedList: function () {
       let tempList = this.reviews;
-      console.log(tempList)
+      console.log(tempList);
 
       console.log("computed");
 
@@ -426,11 +438,11 @@ export default {
       if (!this.ascending) {
         tempList.reverse();
       }
-      console.log(tempList)
+      console.log(tempList);
       return tempList;
-    }
- },
- methods: {
+    },
+  },
+  methods: {
     fetchItems: async function () {
       await database
         .collection("listings")
@@ -438,11 +450,11 @@ export default {
         .get()
         .then((snapshot) => {
           const toAdd = snapshot.data();
-          this.listingDetails = toAdd;
+          let item = { ...toAdd, ["id"]: snapshot.id };
+          this.listingDetails = item;
         });
 
-      
-      console.log(this.$route.params.id)
+      console.log(this.$route.params.id);
 
       await database
         .collection("listings")
@@ -457,10 +469,10 @@ export default {
           });
         });
 
-        console.log(this.listingDetails.photos)
-        this.displayedList = this.reviews
+      console.log(this.listingDetails.photos);
+      this.displayedList = this.reviews;
 
-        console.log(this.reviews)
+      console.log(this.reviews);
     },
 
     bookPage: function () {
@@ -469,6 +481,66 @@ export default {
           this.$router.push({ name: "reservation" });
         } else {
           alert("You have to be logged in to make a booking");
+        }
+      });
+    },
+
+    openChat: function () {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          const userID = user.uid;
+          database
+            .collection("users")
+            .doc(userID)
+            .get()
+            .then((snapshot) => {
+              const userName = snapshot.data().name;
+              console.log(this.listingDetails);
+
+              database
+                .collection("chatrooms")
+                .where("businessID", "==", this.listingDetails.id)
+                .where("customerID", "==", userID)
+                .limit(1)
+                .get()
+                .then(querySnapshot => {
+                  querySnapshot.forEach(async docSnapshot => {
+                  console.log(this.listingDetails.id);
+                  console.log(userID);
+                  console.log(docSnapshot.exists)
+                  if (docSnapshot.exists) {
+                    this.$router.push({ path: "/chat" });
+                  } else {
+                    await database
+                      .collection("chatrooms")
+                      .add({
+                        businessID: this.listingDetails.id,
+                        businessName: this.listingDetails.name,
+                        customerID: userID,
+                        customerName: userName,
+                        last_date: new Date(),
+                        last_message: "Send a message!",
+                        last_user: "Chat",
+                      })
+                      .then((docRef) => {
+                        database
+                          .collection("chatrooms")
+                          .doc(docRef.id)
+                          .collection("messages")
+                          .add({
+                            sender: "System",
+                            message: "Send a message to start chatting!",
+                            time: new Date(),
+                          });
+                      });
+
+                    this.$router.push({ path: "/chat" });
+                  }
+                })
+              });
+            });
+        } else {
+          alert("You have to be logged in!");
         }
       });
     },
@@ -496,9 +568,9 @@ export default {
 
   watch: {
     $route: "fetchItems",
-    sortBy: function() {
-      console.log(this.sortBy)
-    }
+    sortBy: function () {
+      console.log(this.sortBy);
+    },
   },
 };
 </script>
@@ -562,7 +634,6 @@ li {
   display: flex;
   vertical-align: middle;
 }
-
 
 .description {
   border-bottom: 2px solid grey;
@@ -659,7 +730,7 @@ li {
   border: 2px solid grey;
   border-radius: 10px;
   margin-bottom: 10px;
-  background-color: whitesmoke
+  background-color: whitesmoke;
 }
 
 .review-list {
@@ -690,19 +761,19 @@ li {
 }
 
 .review-comment {
-    text-align: left;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 3px;
-    border-bottom: 2px dotted lightgrey;
-    word-break:break-all;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 3px;
+  border-bottom: 2px dotted lightgrey;
+  word-break: break-all;
 }
 
 .review-author {
-    text-align: right;
-    padding-right: 3px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+  text-align: right;
+  padding-right: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 /* #name {
   font-size: 40px;
