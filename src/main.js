@@ -20,27 +20,29 @@ const myRouter = new VueRouter({
   mode: 'history'
 })
 
-myRouter.beforeEach((to, from, next) => {
-  const auth = to.meta.auth
-  if (!auth) {
-    next();
-  } else {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        next('/login');
-      } else {
-        database.collection('users').doc(user.uid).get().then(snapshot => {
-          const data = snapshot.data();
-          const usertype = data.usertype;
-          if (usertype == auth) {
-            next();
-          } else {
-            alert('Not authorized!');
-            next('/');
-          }
-        })
-      }
-    })
+// myRouter.beforeEach((to, from, next) => {
+//   const auth = to.meta.auth
+//   if (!auth) {
+//     next();
+//   } else {
+//     firebase.auth().onAuthStateChanged((user) => {
+//       if (!user) {
+//         next('/login');
+//       } else {
+//         database.collection('users').doc(user.uid).get().then(snapshot => {
+//           const data = snapshot.data();
+//           const usertype = data.usertype;
+//           if (usertype == auth) {
+//             next();
+//           } else {
+//             alert('Not authorized!');
+//             next('/');
+//           }
+//         })
+//       }
+//     })
+//   }
+// })
     
   
     // let currentUser = firebase.auth()
@@ -57,8 +59,7 @@ myRouter.beforeEach((to, from, next) => {
 
     //   console.log(usertype)
     // }
-  }
-})
+
 
 new Vue({
   render: h => h(App),

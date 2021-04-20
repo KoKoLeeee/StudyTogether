@@ -14,7 +14,7 @@
               v-on:click="fetchMessage($event, index)"
             >
               <div class="title">
-                <h4>{{ chat["businessName"] }}</h4>
+                <h4>{{ usertype == 'customer' ? chat["businessName"] : chat['customerName'] }}</h4>
                 <p>
                   Last Message:
                   {{

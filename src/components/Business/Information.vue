@@ -158,22 +158,23 @@
         </vueper-slides>
 
         <b-button-group>
-          <b-button @click="photos = []" variant="outline-secondary"><b-icon icon="arrow-clockwise"  variant="danger"></b-icon></b-button>
+          <b-button @click="photos = []" variant="outline-secondary"
+            ><b-icon icon="arrow-clockwise" variant="danger"></b-icon
+          ></b-button>
 
-        <b-button @click.prevent="deletePhoto" variant="outline-secondary"
-          ><b-icon icon="trash"></b-icon></b-button
-        >
+          <b-button @click.prevent="deletePhoto" variant="outline-secondary"
+            ><b-icon icon="trash"></b-icon
+          ></b-button>
 
-        <b-button @click.prevent="saveCover" variant="outline-secondary"
-          >Set as Cover Photo</b-button
-        >
+          <b-button @click.prevent="saveCover" variant="outline-secondary"
+            >Set as Cover Photo</b-button
+          >
 
-        <b-button @click.prevent="savePhotos" variant="outline-secondary"
-          ><b-icon icon="check-square" variant="success"></b-icon></b-button
-        >
+          <b-button @click.prevent="savePhotos" variant="outline-secondary"
+            ><b-icon icon="check-square" variant="success"></b-icon
+          ></b-button>
         </b-button-group>
 
-        
         <!-- <div class="editPhotos">
           Current Photos:
           <br /><br />
@@ -206,7 +207,7 @@
           bullets-outside
           class="photo-slides"
           :bullets="false"
-          :arrows-outside="false"
+          :arrows-outside="true"
           :disableArrowsOnEdges="true"
           :infinite="false"
           fixed-height="200px;"
@@ -221,20 +222,17 @@
         </vueper-slides>
 
         <b-button-group>
-          <b-button @click="menu = []" variant="outline-secondary"><b-icon icon="arrow-clockwise"  variant="danger"></b-icon></b-button>
+          <b-button @click="menu = []" variant="outline-secondary"
+            ><b-icon icon="arrow-clockwise" variant="danger"></b-icon
+          ></b-button>
           <b-button @click.prevent="deleteMenu" variant="outline-secondary"
-          ><b-icon icon="trash"></b-icon></b-button
-        >
+            ><b-icon icon="trash"></b-icon
+          ></b-button>
           <b-button @click.prevent="saveMenu" variant="outline-secondary"
-          ><b-icon icon="check-square" variant="success"></b-icon></b-button
-        >
+            ><b-icon icon="check-square" variant="success"></b-icon
+          ></b-button>
         </b-button-group>
 
-        
-
-        
-
-        
         <!-- <multi
           @upload-success="uploadImageSuccess"
           @edit-image="editImage"
@@ -331,41 +329,54 @@ export default {
 
   methods: {
     fetchID: async function () {
-      var user = firebase.auth().currentUser;
-      console.log(user.uid);
-      var userID = user.uid;
-      this.bizID = userID;
+      // var user = await firebase.auth().currentUser;
+      // console.log(user.uid);
+      // var userID = user.uid;
+      // this.bizID = userID;
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          var userID = user.uid;
+          this.bizID = userID;
+        }
+        console.log(this.bizID);
+      });
     },
 
     fetchItems: async function () {
-      await database
-        .collection("listings")
-        .doc(this.bizID)
-        .get()
-        .then((snapshot) => {
-          const toAdd = snapshot.data();
-          this.listingDetail = toAdd;
-          this.region = toAdd.loc_filter;
-          this.description = toAdd.description;
-          this.phoneNum = toAdd.phoneNum;
-          this.neighbourhood = toAdd.loc_neighbourhood;
-          this.exact_loc = toAdd.exact_loc;
-          this.name = toAdd.name;
-          this.price = toAdd.price;
-          this.amenities = toAdd.amenities;
-          // check again
-          this.photos = toAdd.photos;
-          // this.photo2 = toAdd.photoURL2;
-          // this.photo3 = toAdd.photoURL3;
-          this.menu = toAdd.menu;
-          this.published = toAdd.published;
-          console.log(toAdd);
-          console.log(this.listingDetail);
-        });
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log(this.bizID);
+
+          database
+            .collection("listings")
+            .doc(this.bizID)
+            .get()
+            .then((snapshot) => {
+              const toAdd = snapshot.data();
+              this.listingDetail = toAdd;
+              this.region = toAdd.loc_filter;
+              this.description = toAdd.description;
+              this.phoneNum = toAdd.phoneNum;
+              this.neighbourhood = toAdd.loc_neighbourhood;
+              this.exact_loc = toAdd.exact_loc;
+              this.name = toAdd.name;
+              this.price = toAdd.price;
+              this.amenities = toAdd.amenities;
+              // check again
+              this.photos = toAdd.photos;
+              // this.photo2 = toAdd.photoURL2;
+              // this.photo3 = toAdd.photoURL3;
+              this.menu = toAdd.menu;
+              this.published = toAdd.published;
+            });
+        }
+      });
     },
 
     save: async function () {
       console.log("name", this.name);
+      console.log(this.bizID);
       database.collection("listings").doc(this.bizID).update({
         loc_filter: this.region,
         loc_neighbourhood: this.neighbourhood,
@@ -381,6 +392,7 @@ export default {
       console.log(this.name);
       console.log(this.exact_loc);
       alert("Information sucessfully updated!");
+      location.reload();
     },
 
     savePhotos: function () {
@@ -430,7 +442,7 @@ export default {
     deletePhoto: function () {
       if (this.photos.length > 0) {
         this.photos.splice(this.photoIndex, 1);
-        alert('Photo deleted!')
+        alert("Photo deleted!");
       }
     },
 
@@ -478,7 +490,6 @@ export default {
       if (this.menu.length > 0) {
         this.menu.splice(this.menuIndex, 1);
         alert("Menu deleted!");
-
       }
     },
     saveMenu: function () {
