@@ -1,13 +1,24 @@
 <template>
 	<div class="chart">
         <app-header></app-header>
-        <button v-on:click.prevent ="show()">Show My Statistics</button>
-        <br><br>
+        <h1 class="subheader">User Statistics</h1>
+        <b-button
+              class="button"
+              variant="outline-success"
+              v-if="showStatistics == false"
+              v-on:click.prevent="show()"
+              >Show My Statistics</b-button
+            >
+        <!-- <button v-on:click.prevent ="show()">Show My Statistics</button>
+        <br><br> -->
+        <div class="charts">
         <form v-show="isLoaded">
+            Select metric to track:
             <select @change="changeMetric" v-model="selectedMetric">
                 <option v-bind:key="item" v-for="item in metricTypeArr">{{item}}</option>
             </select>
             <br><br>
+            Select type of chart:
             <select v-model="selectedChartType">
                 <option v-bind:key="item" v-for="item in typeChart">{{item}}</option>
             </select>
@@ -15,6 +26,7 @@
         <bar-chart v-if="selectedChartType == 'Bar Chart' && isLoaded" :chart-data="datacollection"></bar-chart>
         <line-chart v-if="selectedChartType == 'Line Chart' && isLoaded" :chart-data="datacollection"></line-chart>
         <br><br>
+        </div>
 	</div>
 </template>
 
@@ -42,7 +54,8 @@ export default {
             metricTypeArr: ['Total Monthly Spendings','Total Monthly Hours'],
             selectedMetric: 'Total Monthly Spendings',
             typeChart: ['Bar Chart', 'Line Chart'],
-            selectedChartType:'Bar Chart'
+            selectedChartType:'Bar Chart',
+            showStatistics: false,
         }
     },
 
@@ -67,6 +80,7 @@ export default {
         },
 
         show() {
+            this.showStatistics = true;
             this.isLoaded = true
         },
 
@@ -201,4 +215,21 @@ export default {
 </script>
 
 <style>
+.subheader {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 40px;
+  margin-bottom: 15px;
+  width: 30%;
+  margin: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 2px solid grey;
+}
+
+.button {
+    margin-top: 15px;
+}
+.charts {
+    margin-top: 15px;
+}
 </style>

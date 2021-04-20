@@ -106,8 +106,13 @@
           </div>
         </div>
         <div class="float-right">
-          <button class="book" v-on:click="bookPage()">Book Now!</button>
-          <button class="book" v-on:click="openChat()">Inquire more</button>
+          <button class="book" v-on:click="bookPage()">
+            <b-icon icon="journal-bookmark" class="bigIcons"></b-icon>Book Now!
+          </button>
+          <button class="book" v-on:click="openChat()">
+            <b-icon icon="chat-right-dots" class="bigIcons"></b-icon>Inquire
+            more
+          </button>
         </div>
       </div>
       <div class="second-row">
@@ -147,7 +152,7 @@
       <div class="reviews">
         <h3>Reviews:</h3>
         <div class="sorting">
-          <b-dropdown text="SortBy">
+          <b-dropdown variant="outline-secondary" text="SortBy">
             <b-dropdown-item
               v-for="option in sortOptions"
               :key="option.value"
@@ -161,7 +166,6 @@
             </template>
           </b-dropdown>
           <b-button
-            squared
             variant="outline-secondary"
             v-on:click="ascending = !ascending"
             class="sort-button"
@@ -174,7 +178,9 @@
           </b-button>
         </div>
         <div v-if="reviews.length == 0">
-          No reviews yet. Make a booking and be the first to leave a review!
+          <h5 class="noReviews">
+            No reviews yet. Make a booking and be the first to leave a review!
+          </h5>
         </div>
         <div v-if="reviews.length != 0">
           <ul class="review-list">
@@ -320,8 +326,28 @@
                     {{ displayedList[commentIndex - 1].comments }}
                   </p>
                 </div>
-                <div class="review-author">
-                  - {{ displayedList[commentIndex - 1].user }}
+                <div class="review-footer">
+                  <div class="review-date">
+                    {{
+                      displayedList[commentIndex - 1].newDate.toLocaleString(
+                        "default",
+                        {
+                          month: "short",
+                        }
+                      ) +
+                      " " +
+                      displayedList[commentIndex - 1].newDate.getDate()
+                    }}
+                    |
+                    {{
+                      displayedList[commentIndex - 1].newDate
+                        .toTimeString()
+                        .split(" ")[0]
+                    }}
+                  </div>
+                  <div class="review-author">
+                    - {{ displayedList[commentIndex - 1].user }}
+                  </div>
                 </div>
                 <!-- <div class="noiseLvl">
                   Noise:
@@ -464,7 +490,8 @@ export default {
         .then((snapshot) => {
           snapshot.docs.forEach((doc) => {
             const add = doc.data();
-            this.reviews.push(add);
+            let item = { ...add, ["newDate"]: add.date.toDate() };
+            this.reviews.push(item);
             console.log(this.reviews[0]);
           });
         });
@@ -503,41 +530,41 @@ export default {
                 .where("customerID", "==", userID)
                 .limit(1)
                 .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(async docSnapshot => {
-                  console.log(this.listingDetails.id);
-                  console.log(userID);
-                  console.log(docSnapshot.exists)
-                  if (docSnapshot.exists) {
-                    this.$router.push({ path: "/chat" });
-                  } else {
-                    await database
-                      .collection("chatrooms")
-                      .add({
-                        businessID: this.listingDetails.id,
-                        businessName: this.listingDetails.name,
-                        customerID: userID,
-                        customerName: userName,
-                        last_date: new Date(),
-                        last_message: "Send a message!",
-                        last_user: "Chat",
-                      })
-                      .then((docRef) => {
-                        database
-                          .collection("chatrooms")
-                          .doc(docRef.id)
-                          .collection("messages")
-                          .add({
-                            sender: "System",
-                            message: "Send a message to start chatting!",
-                            time: new Date(),
-                          });
-                      });
+                .then((querySnapshot) => {
+                  querySnapshot.forEach(async (docSnapshot) => {
+                    console.log(this.listingDetails.id);
+                    console.log(userID);
+                    console.log(docSnapshot.exists);
+                    if (docSnapshot.exists) {
+                      this.$router.push({ path: "/chat" });
+                    } else {
+                      await database
+                        .collection("chatrooms")
+                        .add({
+                          businessID: this.listingDetails.id,
+                          businessName: this.listingDetails.name,
+                          customerID: userID,
+                          customerName: userName,
+                          last_date: new Date(),
+                          last_message: "Send a message!",
+                          last_user: "Chat",
+                        })
+                        .then((docRef) => {
+                          database
+                            .collection("chatrooms")
+                            .doc(docRef.id)
+                            .collection("messages")
+                            .add({
+                              sender: "System",
+                              message: "Send a message to start chatting!",
+                              time: new Date(),
+                            });
+                        });
 
-                    this.$router.push({ path: "/chat" });
-                  }
-                })
-              });
+                      this.$router.push({ path: "/chat" });
+                    }
+                  });
+                });
             });
         } else {
           alert("You have to be logged in!");
@@ -724,6 +751,19 @@ li {
   margin: auto;
 }
 
+.sorting {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid grey;
+}
+
+.noReviews {
+  margin: 0;
+  padding-top: 10px;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
 .indiv-review {
   margin-top: 10px;
   padding: 15px;
@@ -769,7 +809,20 @@ li {
   word-break: break-all;
 }
 
+.review-footer {
+  display: flex;
+}
+
+.review-date {
+  float: left;
+  text-align: left;
+  width:50%;
+  padding-left: 3px;
+  padding-top: 5px;
+  padding-top: 5px;
+}
 .review-author {
+  width: 50%;
   text-align: right;
   padding-right: 3px;
   padding-top: 5px;
@@ -882,10 +935,15 @@ li {
   margin-left: 3px;
 } */
 
+.bigIcons {
+  margin-right: 10px;
+}
+
 .book {
   flex-grow: 1;
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-left: 5px;
   /* display: inline-block; */
   cursor: pointer;
   border-radius: 10px;

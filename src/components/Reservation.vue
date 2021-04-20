@@ -3,7 +3,7 @@
     <app-header></app-header>
 
     <div>
-      <h1 class="title">Make A Reservation</h1>
+      <h1 class="subheader">Make A Reservation</h1>
     </div>
     <div class="float-container">
       <form class="form">
@@ -398,7 +398,7 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+.subheader {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 40px;
   margin-bottom: 15px;

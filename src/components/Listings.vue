@@ -11,14 +11,14 @@
             placeholder="What are you looking for?"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
+            <b-button variant="outline-secondary" v-b-modal.modal-prevent-closing
               ><b-icon icon="filter"></b-icon
             ></b-button>
           </b-input-group-append>
         </b-input-group>
 
         <div class="sorting">
-          <b-dropdown text="SortBy">
+          <b-dropdown variant="outline-secondary" text="SortBy">
             <b-dropdown-item
               v-for="option in sortOptions"
               :key="option.value"
@@ -32,7 +32,7 @@
             </template>
           </b-dropdown>
           <b-button
-            squared
+            
             variant="outline-secondary"
             v-on:click="ascending = !ascending"
             class="sort-button"

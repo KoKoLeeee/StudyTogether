@@ -45,7 +45,7 @@
                 <li v-for="(message, index) in messages" :key="index">
                   <div class="right" v-if="message.sender == userID">
                     <p class="right-content">{{ message.message }}</p>
-                    <p class="small-date">
+                    <p class="small-date-right">
                       {{
                         message["newDate"].toLocaleString("default", {
                           month: "short",
@@ -63,6 +63,17 @@
                   <div class="left" v-else>
                     <p class="left-content">
                       {{ message.message }}
+                    </p>
+                    <p class="small-date-left">
+                      {{
+                        message["newDate"].toLocaleString("default", {
+                          month: "short",
+                        }) +
+                        " " +
+                        message["newDate"].getDate()
+                      }}
+                      |
+                      {{ message["newDate"].toTimeString().split(" ")[0] }}
                     </p>
                   </div>
                 </li>
@@ -372,6 +383,11 @@ ul {
 .indiv-chatlist {
   padding-top: 12px;
   border-top: 1px solid grey;
+  cursor: pointer;
+}
+
+.indiv-chatlist:hover {
+  background-color: lightgrey;
 }
 
 .chatpage {
@@ -425,8 +441,15 @@ ul {
   padding-top: 10px;
 }
 
-.small-date {
+.small-date-right {
   margin-bottom: 0px;
   padding-top: 1px;
+  padding-right: 15px;
+}
+
+.small-date-left {
+  margin-bottom: 0px;
+  padding-top: 1px;
+  padding-left: 15px;
 }
 </style>
