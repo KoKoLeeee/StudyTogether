@@ -531,35 +531,62 @@ export default {
                 .limit(1)
                 .get()
                 .then((querySnapshot) => {
-                  querySnapshot.forEach(async (docSnapshot) => {
+                  if (querySnapshot.docs.length == 0) {
+                    database
+                      .collection("chatrooms")
+                      .add({
+                        businessID: this.listingDetails.id,
+                        businessName: this.listingDetails.name,
+                        customerID: userID,
+                        customerName: userName,
+                        last_date: new Date(),
+                        last_message: "Send a message!",
+                        last_user: "Chat",
+                      })
+                      .then((docRef) => {
+                        database
+                          .collection("chatrooms")
+                          .doc(docRef.id)
+                          .collection("messages")
+                          .add({
+                            sender: "System",
+                            message: "Send a message to start chatting!",
+                            time: new Date(),
+                          });
+                      });
+                    this.$router.push({ path: "/chat" });
+                  }
+
+                  querySnapshot.docs.forEach(async (docSnapshot) => {
+                    console.log("test");
                     console.log(this.listingDetails.id);
                     console.log(userID);
                     console.log(docSnapshot.exists);
                     if (docSnapshot.exists) {
                       this.$router.push({ path: "/chat" });
                     } else {
-                      await database
-                        .collection("chatrooms")
-                        .add({
-                          businessID: this.listingDetails.id,
-                          businessName: this.listingDetails.name,
-                          customerID: userID,
-                          customerName: userName,
-                          last_date: new Date(),
-                          last_message: "Send a message!",
-                          last_user: "Chat",
-                        })
-                        .then((docRef) => {
-                          database
-                            .collection("chatrooms")
-                            .doc(docRef.id)
-                            .collection("messages")
-                            .add({
-                              sender: "System",
-                              message: "Send a message to start chatting!",
-                              time: new Date(),
-                            });
-                        });
+                      // await database
+                      //   .collection("chatrooms")
+                      //   .add({
+                      //     businessID: this.listingDetails.id,
+                      //     businessName: this.listingDetails.name,
+                      //     customerID: userID,
+                      //     customerName: userName,
+                      //     last_date: new Date(),
+                      //     last_message: "Send a message!",
+                      //     last_user: "Chat",
+                      //   })
+                      //   .then((docRef) => {
+                      //     database
+                      //       .collection("chatrooms")
+                      //       .doc(docRef.id)
+                      //       .collection("messages")
+                      //       .add({
+                      //         sender: "System",
+                      //         message: "Send a message to start chatting!",
+                      //         time: new Date(),
+                      //       });
+                      //   });
 
                       this.$router.push({ path: "/chat" });
                     }
@@ -816,7 +843,7 @@ li {
 .review-date {
   float: left;
   text-align: left;
-  width:50%;
+  width: 50%;
   padding-left: 3px;
   padding-top: 5px;
   padding-top: 5px;

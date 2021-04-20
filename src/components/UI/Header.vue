@@ -14,7 +14,7 @@
           <li v-if="loggedIn != 'none'"><router-link to="/chat">Chats</router-link></li>
           <li v-if="loggedIn == 'customer'"><router-link to="/userChart">My Stats</router-link></li>
           <li v-if="loggedIn == 'owner'"><router-link to ="/bizdashboard">Business Stats</router-link></li>
-          <li v-if="loggedIn != 'none'"><router-link v-on:click.native="signOut" to="/">Logout</router-link></li>
+          <li v-if="loggedIn != 'none'"><router-link v-on:click.native="signOut()" to="/">Logout</router-link></li>
           <li v-else><router-link to="/login">Login</router-link></li>
         </ul>
       </nav>
@@ -56,7 +56,7 @@ export default {
     signOut: function() {
       this.loggedIn = 'none';
       this.userID = "";
-      firebase.auth().signOut().catch(err => console.log(err))
+      firebase.auth().signOut().catch(err => console.log(err)).then(() => location.reload())
     }
   },
   

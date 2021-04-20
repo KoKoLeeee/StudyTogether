@@ -60,19 +60,20 @@
           <b-form-checkbox-group
             v-model="location"
             :options="locationOptions"
-            class="mb-3"
+             class="checkgroup"
             value-field="item"
             text-field="name"
             disabled-field="notEnabled"
           ></b-form-checkbox-group>
-          <div>
+          <!-- <div>
             Selected: <strong>{{ location }}</strong>
-          </div>
+          </div> -->
           <h4>Price Level</h4>
           <b-form-checkbox-group
             id="checkbox-group-2"
             v-model="price"
             :aria-describedby="ariaDescribedby"
+            class="checkgroup"
           >
             <b-form-checkbox value="cheap"
               ><b-icon icon="cash-stack" class="filter-cash"></b-icon
@@ -87,14 +88,15 @@
               ><b-icon icon="cash-stack" class="filter-cash"></b-icon
             ></b-form-checkbox>
           </b-form-checkbox-group>
-          <div>
+          <!-- <div>
             Selected: <strong>{{ price }}</strong>
-          </div>
+          </div> -->
           <h4>Noise Level</h4>
           <b-form-checkbox-group
             id="checkbox-group-2"
             v-model="noise"
             :aria-describedby="ariaDescribedby"
+            class="checkgroup"
           >
             <b-form-checkbox :value="1"
               ><b-icon icon="volume-off" class="filter-volume"></b-icon
@@ -109,9 +111,9 @@
               ><b-icon icon="volume-up" class="filter-volume"></b-icon
             ></b-form-checkbox>
           </b-form-checkbox-group>
-          <div>
+          <!-- <div>
             Selected: <strong>{{ noise }}</strong>
-          </div>
+          </div> -->
 
           <!-- <div>
           <input type="checkbox" id="cheap" value="cheap" v-model="price" />
@@ -1202,6 +1204,10 @@ input {
 
 .sort-button {
   margin-left: 5px;
+}
+
+.checkgroup {
+  padding-bottom: 10px;
 }
 /* .location,
 .noise,

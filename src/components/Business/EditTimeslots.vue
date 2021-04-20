@@ -26,7 +26,7 @@
               <b-form-input v-model.number="pax" placeholder="PAX Limit"></b-form-input>
               <b-input-group-append>
                 <b-button variant="outline-success" v-on:click="update()"><b-icon icon="arrow-repeat"></b-icon></b-button>
-                 <b-button variant="outline-secondary" v-on:click="selecttAll()"><b-icon icon="check-square"></b-icon></b-button>
+                 <b-button variant="outline-secondary" v-on:click="selectAll()"><b-icon icon="check-square"></b-icon></b-button>
                  <b-button variant="outline-secondary" v-b-modal.modal-prevent-closing
               ><b-icon icon="plus"></b-icon></b-button
             >
@@ -83,33 +83,34 @@
               ok-only
             >
               <form ref="form" @submit.stop.prevent="handleSubmit">
-                <h4>Opening Time</h4>
+                <h4 class="subtitle">Opening Time</h4>
                 <b-form-input
                   v-model="start"
                   placeholder="Opening Time in HHMM format. Eg. 0000"
                 ></b-form-input>
                 <div>
-                  Selected: <strong>{{ start }}</strong>
+                  <!-- Selected: <strong>{{ start }}</strong> -->
                 </div>
-                <h4>Closing Time</h4>
+                <h4 class="subtitle">Closing Time</h4>
                 <b-form-input
                   v-model="end"
                   placeholder="Closing Time in HHMM format. Eg. 0000"
                 ></b-form-input>
                 <div>
-                  Selected: <strong>{{ end }}</strong>
+                  <!-- Selected: <strong>{{ end }}</strong> -->
                 </div>
 
-                <h4>Maximum PAX</h4>
+                <h4 class="subtitle">Maximum PAX</h4>
                 <b-form-input
                   type="number"
                   v-model="pax"
                   placeholder="Maximum PAX"
                 ></b-form-input>
                 <div>
-                  Selected: <strong>{{ pax }}</strong>
+                  <!-- Selected: <strong>{{ pax }}</strong> -->
                 </div>
                 <b-form-checkbox-group
+                  class="checkgroup"
                   id="checkbox-group-2"
                   :value="true"
                   v-model="applyMonth"
@@ -202,7 +203,12 @@ export default {
 
   methods: {
     fetchID: function () {
-      this.bizID = firebase.auth().currentUser.uid;
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.bizID = user.uid 
+        }
+      })
+      // this.bizID = firebase.auth().currentUser.uid;
     },
 
     selectAll: function () {
@@ -371,7 +377,7 @@ export default {
         }
 
         this.applyMonth = false;
-        location.reload();
+        // location.reload();
       } else {
         //add timeslot for the day
         var docRefDate = database
@@ -394,7 +400,7 @@ export default {
             }
           }
         });
-        location.reload();
+        // location.reload();
       }
     },
 
@@ -575,4 +581,12 @@ select {
     margin: auto;
 }
 
+.subtitle {
+  padding-left:3px;
+  padding-top:10px;
+}
+
+.checkgroup {
+  padding-top: 10px;
+}
 </style>

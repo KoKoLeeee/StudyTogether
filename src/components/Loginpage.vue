@@ -129,7 +129,7 @@ export default {
 .box {
   background-color: #ffffff;
   width: 400px;
-  height: 390px;
+  height: 420px;
   margin: 7em auto;
   border-radius: 40px;
   box-shadow: 0px 0px 10px 10px lightgrey;
