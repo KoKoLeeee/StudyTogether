@@ -4,9 +4,9 @@
     <h1 class="subheader">Favourites</h1>
     <ul class="favourites-list">
       <li class="segment" v-for="(listing, index) in list" :key="index">
-        <img :src="listing.cover_photo" alt="picture" class="main-pic" />
+        <img :src="listing.cover_photo" alt="picture" :id="listing.id" class="main-pic" v-on:click="route($event)"/>
         <div class="info">
-          <div class="title">
+          <div class="title" :id="listing.id" v-on:click="route($event)">
             <h3 class="name">
               {{ listing.name }}
             </h3>
@@ -120,6 +120,11 @@ export default {
         .update({ favourites: this.idList })
         .then();
     },
+
+    route: function(event) {
+      let id = event.currentTarget.getAttribute("id")
+      this.$router.push({ name:"indiv", params: { id: id}})
+    }
   },
 };
 </script>
@@ -148,6 +153,7 @@ li {
   display: flex;
   font-size: 35px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .button {
@@ -202,6 +208,7 @@ li {
   border-radius: 15px;
   width: 40%;
   height: 100%;
+  cursor: pointer;
 }
 
 </style>
