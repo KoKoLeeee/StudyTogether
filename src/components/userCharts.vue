@@ -9,8 +9,6 @@
               v-on:click.prevent="show()"
               >Show My Statistics</b-button
             >
-        <!-- <button v-on:click.prevent ="show()">Show My Statistics</button>
-        <br><br> -->
         <div class="charts">
         <form v-show="isLoaded">
             Select metric to track:

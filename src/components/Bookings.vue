@@ -3,18 +3,11 @@
     <app-header></app-header>
     
     <div class="table" v-if="newBookings.length > 0">
-        <!-- <h1>Bookings</h1> -->
-        <!-- <br><br> -->
       <ul>
-        <!-- <h3><b>Upcoming</b></h3> -->
         <h1 class="subheader">Upcoming Bookings</h1>
         <br>
         <li class="segment" v-for="(booking, index) in newBookings" :key="index">
-          <!-- picture -->
-          <!-- <div class="picture"> -->
           <img :src="booking[6]" alt="picture" class="main-pic" />
-          <!-- </div> -->
-          <!-- button -->
           <div class="info">
             <div class="title">
               <h3 class="name">
@@ -31,17 +24,6 @@
                 "
                 >Cancel Booking</b-button
               >
-
-              <!-- <button
-                class="button"
-                v-bind:id="booking[7]"
-                v-on:click="
-                  cancel(booking.index);
-                  del($event);
-                "
-              >
-                Cancel Booking
-              </button> -->
             </div>
             <p class="pax">
               <b-icon icon="person-plus" class="icons"></b-icon>
@@ -52,42 +34,7 @@
               {{ booking[3] }} / {{ booking[4] }}
             </p>
           </div>
-          <!-- <button
-            href="#"
-            class="btn"
-            v-bind:id="booking[7]"
-            v-on:click="
-              cancel(booking.index);
-              del($event);
-            "
-          >
-            Cancel Booking
-          </button> -->
-          <!-- pax -->
-          <!-- <div id="pax">
-            <b>Total Coming: {{ booking[1] }}</b>
-          </div> -->
-          <!-- timing -->
-          <!-- <div id="clockIcon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="#2c3e50"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <circle cx="12" cy="12" r="9" />
-              <polyline points="12 7 12 12 15 15" />
-            </svg>
-            <span id="time"
-              ><b>{{ booking[3] }} / {{ booking[4] }}</b></span
-            >
-          </div> -->
+          
         </li>
       </ul>
     </div>
@@ -96,11 +43,7 @@
         <h1 class="subheader">Past Bookings</h1>
       <ul>
         <li class="segment" v-for="booking in pastBookings" :key="booking.index">
-          <!-- picture -->
-          <!-- <div class="picture"> -->
           <img :src="booking[6]" alt="picture" class="main-pic" />
-          <!-- </div> -->
-          <!-- button -->
           <div class="info">
             <div class="title">
               <h3 class="name">
@@ -116,17 +59,6 @@
                 v-on:click="route($event)"
                 >Leave Review</b-button
               >
-
-              <!-- <button
-                class="button"
-                v-bind:id="booking[7]"
-                v-on:click="
-                  cancel(booking.index);
-                  del($event);
-                "
-              >
-                Cancel Booking
-              </button> -->
             </div>
             <p class="pax">
               <b-icon icon="person-plus" class="icons"></b-icon>
@@ -138,47 +70,7 @@
             </p>
           </div>
 
-          <!--     
-        <h3><b>Previous</b></h3>
-        <li v-for="booking in pastBookings" :key="booking.index">
-          <div id="name">
-            <b>{{ booking[6] }}</b>
-          </div>
-          <br />
-          <img :src="booking[5]" alt="picture" id="main-pic" />
-         
-          <button
-            href="#"
-            class="btn"
-            v-bind:id="booking[2]"
-            v-on:click="route($event)"
-          >
-            Leave Review
-          </button>
-          <div id="pax">
-            <b>Total Coming: {{ booking[1] }}</b>
-          </div>
-          <div id="clockIcon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="#2c3e50"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <circle cx="12" cy="12" r="9" />
-              <polyline points="12 7 12 12 15 15" />
-            </svg>
-            <span id="time"
-              ><b>{{ booking[3] }} / {{ booking[4] }}</b></span
-            >
-          </div>
-        </li> -->
+          
         </li>
       </ul>
     </div>
@@ -209,18 +101,12 @@ export default {
             let doc_id = event.target.getAttribute("id")
             let loc_id = event.target.getAttribute("locId");
             let dateBooked = event.target.getAttribute("date");
-            // console.log(loc_id)
-            // console.log(this.pastBookings)
             this.$router.push({path: `reviews/${loc_id}`, query: {loc_id: loc_id, date: dateBooked, doc_id: doc_id}})
         },
 
         visitDateToString: function(dateOfVisit) {
-            // dateOfVisit == Apr 17 2021
-            // month == Apr
             let month = dateOfVisit.slice(0,3)
-            // day == 17
             let day = dateOfVisit.slice(4,6)
-            // year == 21
             let year = dateOfVisit.slice(-2)
 
             let monthString = ''
@@ -279,7 +165,6 @@ export default {
             const timeslots = database.collection('listings').doc(loc).collection('timeslots').doc(stringOfVisitDate)
         
             for(var booking of arrOfBookings) {
-                console.log(booking)
                 timeslots.update({
                     [booking] :increasePax
                 })
@@ -310,8 +195,7 @@ export default {
 
         fetchItems: async function() {
             this.docArr = await this.getDoc()
-            var currentUser = firebase.auth().currentUser.uid 
-            // console.log(currentUser)
+            var currentUser = firebase.auth().currentUser.uid
             let upcoming = []
             let past = []
 
@@ -330,21 +214,6 @@ export default {
                   return (new Date(a[3]) > new Date(b[3])) ? -1 : 1;
               }
             }
-
-            // function convertUTCDateToLocalDate(date) {
-            //     var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
-
-            //     var offset = date.getTimezoneOffset() / 60;
-            //     var hours = date.getHours();
-
-            //     newDate.setHours(hours - offset);
-
-            //     return newDate;   
-            // }
-
-            // sorts the timings in the 'time' array in firestore. 
-            // if the array is ['0900 - 1000', '0800 - 0900', '1400 - 1500','1300 - 1400'],
-            // it returns ['0800 - 0900', '0900 - 1000', '1300 - 1400','1400 - 1500']
             function sortByTiming(a, b) {
                 if (Number(a.slice(0,2)) == Number(b.slice(0,2))) {
                     return 0;
@@ -352,9 +221,6 @@ export default {
                     return (Number(a.slice(0,2)) < Number(b.slice(0,2))) ? -1 : 1;
                 }
             }
-            // segements the timings into intervals. 
-            // E.g if the sorted array is ['0800 - 0900', '0900 - 1000', '1000 - 1100', '1300 - 1400','1400 -1500']
-            // it returns ['0800 - 1100', '1300 - 1500']
             function segmentToIntervals(arr) {
                 var intervals = []
                 var currTime = arr[0].slice(0,4)
@@ -443,13 +309,6 @@ export default {
 
 <style scoped>
 ul {
-  /* display: flex; 
-  flex-wrap: wrap;
-  list-style-type: none;
-  padding: 30%;
-  padding-top: 3%; 
-  margin: auto;
-  height:30%; */
   display: inline-block;
   overflow-y: scroll;
   list-style-type: none;
@@ -463,19 +322,9 @@ li {
   display: flex;
   width: 60%;
   height: 200px;
-  /* height: 80%; */
-  /* position: relative; */
   text-align: center;
-  /* padding: 10px; */
-  /* border: 3px solid #ED7A78; */
-  /* margin: 10px; */
-  /* margin-top: 5px; */
-  /* margin-bottom: 0px; */
-  /* padding-bottom: 1px; */
-  /* border-radius: 25px; */
   font-family: "Ubuntu", sans-serif;
   margin: auto;
-  /* margin: 0 0 10 0; */
 }
 
 .info {
@@ -534,65 +383,10 @@ li {
   border: 2px solid grey;
 }
 
-/* h3 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 20px;
-} */
-/* .bookings-list {
-    margin-left: 36px;
-} */
-
-/* .table {
-  display: table;
-  margin: 0 auto;
-  height: 100%;
-  width: 100%;
-} */
-
 .status {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 25px;
 }
-
-/* .btn {
-  position: relative;
-  float: left;
-  left: 20%;
-  top: 20%;
-  bottom: 150px;
-  margin-top: 10px;
-    margin-bottom: 10px;
-  display: inline-block;
-  cursor: pointer;
-  border-radius: 10px;
-  color: whitesmoke;
-  background: #ed7a78;
-  border: 2px solid transparent;
-  height: 50px;
-  width: 90px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 50px;
-  padding-top: 10px;
-  font-family: "Ubuntu", sans-serif;
-  font-weight: bold;
-  font-size: 15px;
-  transition: 0.2s;
-} */
-
-/* #pax {
-  position: relative;
-  left: 10%;
-  bottom: 140px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 15px;
-} */
-
-/* #clockIcon {
-  position: relative;
-  left: 20%;
-  bottom: 100px;
-} */
 
 .picture {
   float: left;
@@ -603,9 +397,7 @@ li {
 }
 
 .main-pic {
-  /* position: relative; */
   float: left;
-  /* right:20%; */
   border-radius: 15px;
   width: 40%;
   height: 100%;
@@ -617,93 +409,4 @@ li {
   float: right;
   margin-left: auto;
 }
-
-/* #name {
-  position: relative;
-  width: 100%;
-  right: 1px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 25px;
-  font-weight: 1000;
-} */
-
-/* #time {
-  position: relative;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px;
-  left: 10px;
-  bottom: 15px;
-} */
-
-/* #button {
-  position: relative;
-} */
-/* imported css for buttons */
-
-/* .btn-gradient {
-  text-decoration: none;
-  color: white;
-  padding: 5px 10px;
-  display: inline-block;
-  position: relative;
-  left: 150px;
-  height: 50px;
-  width: 90px;
-  font-size: 15px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  border: 1px solid rgba(0, 0, 0, 0.21);
-  border-bottom: 4px solid rgba(0, 0, 0, 0.21);
-  border-radius: 4px;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
-}
-
-.btn-gradient.yellow {
-  background: rgba(240, 210, 100, 1);
-  background: -webkit-gradient(
-    linear,
-    0 0,
-    0 100%,
-    from(rgba(240, 210, 100, 1)),
-    to(rgba(229, 201, 96, 1))
-  );
-  background: -webkit-linear-gradient(
-    rgba(240, 210, 100, 1) 0%,
-    rgba(229, 201, 96, 1) 100%
-  );
-  background: -moz-linear-gradient(
-    rgba(240, 210, 100, 1) 0%,
-    rgba(229, 201, 96, 1) 100%
-  );
-  background: -o-linear-gradient(
-    rgba(240, 210, 100, 1) 0%,
-    rgba(229, 201, 96, 1) 100%
-  );
-  background: linear-gradient(
-    rgba(240, 210, 100, 1) 0%,
-    rgba(229, 201, 96, 1) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0d264', endColorstr='#e5c960', GradientType=0 );
-}
-
-.btn-gradient.red:active {
-  background: #e35252;
-}
-.btn-gradient.orange:active {
-  background: #e8601b;
-}
-.btn-gradient.cyan:active {
-  background: #169499;
-}
-.btn-gradient.blue:active {
-  background: #608fbf;
-}
-.btn-gradient.purple:active {
-  background: #bd8eb7;
-}
-.btn-gradient.yellow:active {
-  background: #dbc05b;
-}
-.btn-gradient.green:active {
-  background: #72b08e;
-} */
 </style>

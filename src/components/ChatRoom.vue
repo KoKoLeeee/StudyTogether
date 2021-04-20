@@ -110,9 +110,7 @@ export default {
     return {
       userID: "",
       usertype: "",
-      // [[message, time, user], ... ]
       messages: [],
-      // [[doc.id, userID, lastmessage, lastperson, lastdate]]
       userlist: [],
       chattingName: "",
       chatroomID: "",
@@ -138,15 +136,6 @@ export default {
   },
 
   methods: {
-    // fetchUserID: function() {
-    //     firebase.auth().onAuthStateChanged(user => {
-    //         if (user) {
-    //             this.userID = user.uid;
-    //         }
-    //     })
-    //     console.log(this.userID)
-
-    // },
     fetchUserID: async function () {
       firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
@@ -159,7 +148,6 @@ export default {
               const data = snapshot.data();
               this.usertype = data.usertype;
             });
-          console.log(this.usertype);
           var query = "";
           if (this.usertype == "customer") {
             query = "customerID";
@@ -175,39 +163,17 @@ export default {
                 let toAdd = doc.data();
                 let newDate = toAdd.last_date.toDate();
                 let item = { ...toAdd, ["id"]: doc.id, ["newDate"]: newDate };
-                console.log(newDate);
                 this.userlist.push(item);
               });
             });
-
-          console.log(this.userlist);
         }
       });
-      //   return new Promise((resolve, reject) => {
-      //     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-      //       unsubscribe();
-      //       resolve(user);
-      //       this.userID = user.uid;
-      //       console.log(this.userID);
-
-      //       await database
-      //         .collection("users")
-      //         .doc(this.userID)
-      //         .get()
-      //         .then((snapshot) => {
-      //           const data = snapshot.data();
-      //           this.usertype = data.usertype;
-      //         });
-      //         console.log(this.usertype)
-      //     }, reject);
-      //   });
     },
 
     fetchMessage: async function (event, index) {
       this.index = index;
       this.messages = [];
       let doc_id = event.currentTarget.getAttribute("id");
-      console.log(doc_id);
 
       await database
         .collection("chatrooms")
@@ -249,9 +215,6 @@ export default {
         message: this.text,
         newDate: new Date(),
       };
-      console.log(item);
-
-      console.log(this.userlist);
 
       await database
         .collection("chatrooms")
@@ -263,11 +226,8 @@ export default {
           time: item.newDate,
         });
 
-      // Vue.set(this.messages, this.messages.length, item)
       this.messages.push(item);
       let itemToUpdate = this.userlist[this.index];
-      console.log(itemToUpdate);
-      console.log(itemToUpdate.newDate);
       itemToUpdate.newDate = item.newDate;
       itemToUpdate.last_message = item.message;
       if (this.usertype == "customer") {
@@ -276,28 +236,12 @@ export default {
         itemToUpdate.last_user = itemToUpdate.businessName;
       }
 
-      //   console.log(itemToUpdate)
-
-      //   console.log(this.userlist);
-      //   console.log(this.index)
-      //   this.userlist.splice(this.index, 1);
-      //   console.log(this.userlist);
-      //   this.userlist.push(itemToUpdate);
-
-      console.log(this.userlist);
-
       await database.collection("chatrooms").doc(this.chatroomID).update({
         last_date: item.newDate,
         last_message: this.text,
         last_user: itemToUpdate.last_user,
       });
-      //   this.userlist[this.index]["last_date"] = item.time;
-      //   this.userlist[this.index]["last_message"] = this.text;
-      //   this.userlist.sort((x, y) => {
-      //     return y["last_date"] - x["last_date"];
-      //   });
 
-      console.log(this.messages);
       this.text = "";
       this.index = 0;
 
@@ -307,45 +251,11 @@ export default {
         },
         600
       );
-      console.log("helo");
     },
-
-    // fetchUsertype: async function () {
-    //   await database
-    //     .collection("users")
-    //     .doc(this.userID)
-    //     .get()
-    //     .then((snapshot) => {
-    //       const data = snapshot.data();
-    //       this.usertype = data.usertype;
-    //     });
-    //   console.log(this.usertype);
-    // },
-
-    // fetchUserList: function () {
-    //   var query = "";
-    //   if (this.usertype == "customer") {
-    //     query = "customerID";
-    //   } else {
-    //     query = "businessID";
-    //   }
-    //   database
-    //     .collection("chatrooms")
-    //     .where(query, "==", this.userID)
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         const data = doc.data();
-    //         this.userlist.push([data["businessName"]]);
-    //       });
-    //     });
-    //   console.log(this.userlist);
-    // },
   },
 
   created() {
     this.fetchUserID();
-    // this.fetchUserList();
   },
 };
 </script>

@@ -5,7 +5,6 @@ const { reactiveProp } = mixins;
 export default {
     extends: Bar,
     mixins: [reactiveProp],
-    // props:['chartData','options'],
     data: function () {
       return {
           

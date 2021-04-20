@@ -17,9 +17,6 @@
           :key="index"
         />
 
-        <!-- <img class="place" v-bind:src = "listingDetails.photoURL1">
-                <img class="place" v-bind:src = "listingDetails.photoURL2">
-                <img class="place" v-bind:src = "listingDetails.photoURL3"> -->
       </vueper-slides>
     </div>
 
@@ -33,72 +30,24 @@
       <div class="float-container">
         <div class="float-left">
           <div class="price">
-            <!--    <img src="https://img.icons8.com/metro/26/000000/us-dollar--v1.png" width="35"/> -->
             <b-icon class="detail-icon" icon="cash-stack"></b-icon>
             ${{ listingDetails.price }} / hour
           </div>
           <div class="location">
-            <!-- <img
-              id="location-pin"
-              src="https://img.icons8.com/pastel-glyph/64/000000/place-marker--v1.png"
-              width="34px"
-            /> -->
             <b-icon class="detail-icon" icon="geo"></b-icon>
             {{ listingDetails.exact_loc }}
           </div>
           <div class="noise" v-show="listingDetails.noise == 1">
-            <!-- <img
-              id="noise-pic"
-              src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-              width="34px"
-            /> -->
             <b-icon class="detail-icon" icon="volume-up"></b-icon>
             Quiet
-            <!-- <span class="noiseVal" v-show="listingDetails.noise == 1">
-              Quiet
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 2">
-              Tolerable
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 3">
-              Some Noise
-            </span> -->
           </div>
           <div class="noise" v-show="listingDetails.noise == 2">
-            <!-- <img
-              id="noise-pic"
-              src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-              width="34px"
-            /> -->
             <b-icon class="detail-icon" icon="volume-up"></b-icon>
             Normal
-            <!-- <span class="noiseVal" v-show="listingDetails.noise == 1">
-              Quiet
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 2">
-              Tolerable
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 3">
-              Some Noise
-            </span> -->
           </div>
           <div class="noise" v-show="listingDetails.noise == 3">
-            <!-- <img
-              id="noise-pic"
-              src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-              width="34px"
-            /> -->
             <b-icon class="detail-icon" icon="volume-up"></b-icon>
             Some Noise
-            <!-- <span class="noiseVal" v-show="listingDetails.noise == 1">
-              Quiet
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 2">
-              Tolerable
-            </span>
-            <span class="noiseVal" v-show="listingDetails.noise == 3">
-              Some Noise
-            </span> -->
           </div>
           <div class="phoneNum">
             <b-icon class="detail-icon" icon="telephone"></b-icon>
@@ -142,12 +91,7 @@
             :image="menu"
             :key="index"
           />
-
-          <!-- <img class="place" v-bind:src = "listingDetails.photoURL1">
-                <img class="place" v-bind:src = "listingDetails.photoURL2">
-                <img class="place" v-bind:src = "listingDetails.photoURL3"> -->
         </vueper-slides>
-        <!-- <img id="menuPhoto" v-bind:src="listingDetails.menu" /> -->
       </div>
       <div class="reviews">
         <h3>Reviews:</h3>
@@ -172,9 +116,6 @@
           >
             <b-icon v-if="ascending" icon="sort-down"></b-icon>
             <b-icon v-else icon="sort-down-alt"></b-icon>
-            <!-- <i v-if="ascending" class="fa fa-sort-up"></i>
-        <i v-else class="fa fa-sort-down"></i>
-        Reverse -->
           </b-button>
         </div>
         <div v-if="reviews.length == 0">
@@ -349,55 +290,7 @@
                     - {{ displayedList[commentIndex - 1].user }}
                   </div>
                 </div>
-                <!-- <div class="noiseLvl">
-                  Noise:
-                  <img
-                    id="noise-pic"
-                    src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-                    width="35px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].noise > 1"
-                    id="noise-pic"
-                    src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-                    width="35px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].noise > 2"
-                    id="noise-pic"
-                    src="https://img.icons8.com/fluent-systems-regular/24/000000/low-volume.png"
-                    width="35px"
-                  />
-                </div> -->
-
-                <!-- <div class="rating">
-                  Rating:
-                  <img
-                    v-if="reviews[commentIndex].rating > 0"
-                    src="https://img.icons8.com/fluent/48/000000/star.png"
-                    width="30px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].rating > 1"
-                    src="https://img.icons8.com/fluent/48/000000/star.png"
-                    width="30px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].rating > 2"
-                    src="https://img.icons8.com/fluent/48/000000/star.png"
-                    width="30px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].rating > 3"
-                    src="https://img.icons8.com/fluent/48/000000/star.png"
-                    width="30px"
-                  />
-                  <img
-                    v-if="reviews[commentIndex].rating > 4"
-                    src="https://img.icons8.com/fluent/48/000000/star.png"
-                    width="30px"
-                  />
-                </div> -->
+          
               </div>
             </li>
             <div
@@ -439,7 +332,6 @@ export default {
       totalComments: 0,
       sortBy: "Sort By",
       sortOptions: [
-        // { value: null, text: "Sort By" },
         { value: "Date", text: "Date" },
         { value: "Ratings", text: "Ratings" },
       ],
@@ -449,9 +341,6 @@ export default {
   computed: {
     displayedList: function () {
       let tempList = this.reviews;
-      console.log(tempList);
-
-      console.log("computed");
 
       //sort method
       if (this.sortBy == "Date") {
@@ -464,7 +353,6 @@ export default {
       if (!this.ascending) {
         tempList.reverse();
       }
-      console.log(tempList);
       return tempList;
     },
   },
@@ -492,14 +380,10 @@ export default {
             const add = doc.data();
             let item = { ...add, ["newDate"]: add.date.toDate() };
             this.reviews.push(item);
-            console.log(this.reviews[0]);
           });
         });
 
-      console.log(this.listingDetails.photos);
       this.displayedList = this.reviews;
-
-      console.log(this.reviews);
     },
 
     bookPage: function () {
@@ -522,7 +406,6 @@ export default {
             .get()
             .then((snapshot) => {
               const userName = snapshot.data().name;
-              console.log(this.listingDetails);
 
               database
                 .collection("chatrooms")
@@ -558,35 +441,9 @@ export default {
                   }
 
                   querySnapshot.docs.forEach(async (docSnapshot) => {
-                    console.log("test");
-                    console.log(this.listingDetails.id);
-                    console.log(userID);
-                    console.log(docSnapshot.exists);
                     if (docSnapshot.exists) {
                       this.$router.push({ path: "/chat" });
                     } else {
-                      // await database
-                      //   .collection("chatrooms")
-                      //   .add({
-                      //     businessID: this.listingDetails.id,
-                      //     businessName: this.listingDetails.name,
-                      //     customerID: userID,
-                      //     customerName: userName,
-                      //     last_date: new Date(),
-                      //     last_message: "Send a message!",
-                      //     last_user: "Chat",
-                      //   })
-                      //   .then((docRef) => {
-                      //     database
-                      //       .collection("chatrooms")
-                      //       .doc(docRef.id)
-                      //       .collection("messages")
-                      //       .add({
-                      //         sender: "System",
-                      //         message: "Send a message to start chatting!",
-                      //         time: new Date(),
-                      //       });
-                      //   });
 
                       this.$router.push({ path: "/chat" });
                     }
@@ -598,18 +455,6 @@ export default {
         }
       });
     },
-
-    /*
-        updateOrder: function() {
-            for (var copyKey in this.datapacket) {
-                var x=document.getElementById(copyKey).value;
-                this.copy[copyKey] = x;
-            }
-            
-            database.collection('orders').doc(this.$route.query.id).set(this.copy).then(
-                this.$router.push({path: "/orders"})
-            ) 
-        }*/
   },
 
   created: function () {
@@ -622,18 +467,11 @@ export default {
 
   watch: {
     $route: "fetchItems",
-    sortBy: function () {
-      console.log(this.sortBy);
-    },
   },
 };
 </script>
 
 <style scoped>
-/* ul {
- list-style-type: none; 
-  padding: 0;
-} */
 
 .pics {
   border-top: 1px solid grey;
@@ -667,10 +505,6 @@ li {
   align-items: center;
   padding-bottom: 25px;
   border-bottom: 2px dashed grey;
-  /* width: 75%;
-  margin: auto; */
-  /* padding: 10px;
-  border: solid 2px grey; */
 }
 
 .float-left,
@@ -855,112 +689,6 @@ li {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-/* #name {
-  font-size: 40px;
-} */
-
-/* hr {
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
-  width: 85%;
-} */
-
-/* #reviews {
-  font-size: 20px;
-} */
-
-/* #reviews ul {
-  list-style-type: none;
-} */
-
-/* #reviews li {
-  border: 5px solid #d6d6d6;
-  border-radius: 25px;
-  height: 100%;
-  width: 95%;
-  padding: 10px;
-  margin: auto;
-  margin-bottom: 30px;
-  background-color: #ebebeb;
-} */
-
-/* #reviews #title {
-  font-size: 25px;
-} */
-
-/* #reviews hr {
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
-  width: 100%;
-  height: 12px;
-  border: 0;
-  box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
-} */
-
-/* #name {
-  font-size: 40px;
-} */
-
-/* .place {
-  height: 250px;
-  padding: 20px;
-} */
-
-/* #amenities,
-#menu {
-  width: 75%;
-  text-align: left;
-  font-size: 20px;
-  margin: auto;
-} */
-
-/* #price,
-#location,
-#noise {
-  text-align: left;
-  margin: auto;
-  font-size: 20px;
-} */
-
-/* #amenitiesList {
-  background-color: lightgrey;
-  border-radius: 15px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-} */
-
-/*
-#price {
-    display: flex;  
-    flex-flow: row wrap;
-}
-*/
-/* #priceVal {
-  margin-top: 3px;
-  font-size: 25px;
-} */
-
-/* #location, #noise {
-    display: flex;  
-    flex-flow: row wrap;
-    margin-left: 190px;
-} */
-
-/* #locationVal,
-.noiseVal {
-  margin-top: 5px;
-  margin-left: 3px;
-} */
 
 .bigIcons {
   margin-right: 10px;
@@ -971,7 +699,6 @@ li {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 5px;
-  /* display: inline-block; */
   cursor: pointer;
   border-radius: 10px;
   color: whitesmoke;
@@ -979,10 +706,6 @@ li {
   border: 2px solid transparent;
   height: 60px;
   width: 200px;
-  /* padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 15px;
-  padding-top: 15px; */
   font-family: "Ubuntu", sans-serif;
   font-weight: bold;
   font-size: 25px;
@@ -1019,8 +742,4 @@ li {
   border-color: white;
   background-color: #e33c39;
 }
-
-/* #menuPhoto {
-  width: 80%;
-} */
 </style>

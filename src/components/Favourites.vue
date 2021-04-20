@@ -24,18 +24,6 @@
             {{ listing.description }} 
           </p>
         </div>
-        <!-- <div id="name">
-          <b> {{ listing.name }} </b>
-        </div>
-        <button class="button" v-bind:index="index" v-on:click="remove($event)">
-        Button to cancel bookmark -->
-        <!-- <button
-          class="button"
-          v-bind:index="index"
-          v-on:click="remove($event)"
-        >
-          Remove
-        </button> -->
       </li>
     </ul>
   </div>
@@ -72,7 +60,6 @@ export default {
           let item = {};
           querySnapShot.docs.forEach((doc) => {
             item = { ...doc.data(), ["id"]: doc.id };
-            // console.log(item)
             arr.push(item);
           });
         });
@@ -89,7 +76,6 @@ export default {
           querySnapShot.docs.forEach((doc) => {
             item = { ...doc.data(), ["id"]: doc.id };
 
-            // console.log(item)
             arr.push(item);
           });
         });
@@ -97,117 +83,42 @@ export default {
     },
 
     fetchItems: async function () {
-      // await setTimeout(() => {}, 1000)
       var listArr = await this.getListing();
-      // var userArr = await this.getUser()
-      console.log("get listings" + listArr);
 
       var user = firebase.auth().currentUser;
-
-      console.log(user);
 
         await database.collection('users').doc(user.uid).get().then(snapshot => {
             const data = snapshot.data();
             this.idList = data.favourites;
-            //this.list = new Array(this.idList.length)
-            console.log(this.idList)
         })
-    
-    //   for (var i = 0; i < userArr.length; i++) {
-    //     if (userArr[i].id == user.id) {
-    //       this.idList = userArr[i].favourites;
-    //     }
-    //   }
 
       for (var j = 0; j < listArr.length; j++) {
-          console.log(this.idList)
-          console.log(listArr[j].id)
-            console.log(this.idList.includes(listArr[j].id))
         if (this.idList.includes(listArr[j].id)) {
-            //this.list[this.idList.indexOf(listArr[j].id)] = listArr[j]
             this.list.push(listArr[j]);
         }
       }
 
-      console.log(this.list);
-
-      //   if (!this.idList.empty) {
-      //     await database
-      //       .collection("listings")
-      //       .get()
-      //       .then((snapshot) => {
-      //         let item = {};
-      //         snapshot.docs.forEach((doc) => {
-      //           if (this.idList.includes(doc.id)) {
-      //             item = { ...doc.data(), ["id"]: doc.id };
-      //             this.list.push(item); //push the list of favourites into list
-      //           }
-      //         });
-      //       });
-      //   }
     },
 
     remove: function (event) {
-      /**
-      let doc_index = event.target.getAttribute("index");
-
-      console.log(event.target);
-      //console.log(doc_id);
-      this.idList.splice(doc_index, 1);
-      **/
       let index = event.currentTarget.getAttribute("index");
       this.list.splice(index,1)
       let doc_id = event.currentTarget.getAttribute("id")
-      console.log(doc_id);
       var newList = [];
       for (var k = 0; k < this.idList.length; k++) {
           if (doc_id != this.idList[k]) {
               newList.push(this.idList[k]);
           }
       }
-      console.log(newList);
 
       this.idList = newList;
 
       let user = firebase.auth().currentUser;
-      // var fav = [];
-      // var newFav = [];
       database
         .collection("users")
         .doc(user.uid)
         .update({ favourites: this.idList })
         .then();
-        //.get()
-        //.then((snapshot) => {
-          //const data = snapshot.data();
-
-          //var fav = data.favourites;
-
-          //const indexOf = fav.indexOf(doc_id);
-
-          //fav.splice(indexOf, 1);
-
-         // database
-         //   .collection("users")
-         //   .doc(user.uid)
-         //   .update({ favourites: fav });
-
-          // snapshot.docs.forEach(doc => {
-          // if (doc.id == user.uid) {//get the user
-          //     fav = doc.data().favourites;
-          //     console.log(fav);
-          //     for (let i = 0; i < fav.length; i++) {
-          //         if (fav[i] != doc_id) {
-          //             newFav.push(fav[i]);
-          //             console.log(newFav[i] + "added");
-          //         }
-          //     }
-          //     database.collection('users').doc(user.uid).update({"favourites": newFav});
-          //     console.log(newFav);
-          //     console.log("remove");
-          // }
-          // })
-        //})
     },
   },
 };
@@ -226,19 +137,9 @@ li {
   display: flex;
   width: 60%;
   height: 200px;
-  /* height: 80%; */
-  /* position: relative; */
   text-align: center;
-  /* padding: 10px; */
-  /* border: 3px solid #ED7A78; */
-  /* margin: 10px; */
-  /* margin-top: 5px; */
-  /* margin-bottom: 0px; */
-  /* padding-bottom: 1px; */
-  /* border-radius: 25px; */
   font-family: "Ubuntu", sans-serif;
   margin: auto;
-  /* margin: 0 0 10 0; */
 }
 
 .title {
@@ -297,28 +198,10 @@ li {
 }
 
 .main-pic {
-  /* position: relative; */
   float: left;
-  /* right:20%; */
   border-radius: 15px;
   width: 40%;
   height: 100%;
 }
 
-/* #main-pic {
-  position: relative;
-  left: 1px;
-  border-radius: 15px;
-  width: 200px;
-  height: 150px;
-}
-
-#name {
-  position: relative;
-  left: 30px;
-  top: 15px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 30px;
-  font-weight: 1000;
-} */
 </style>

@@ -1,15 +1,9 @@
 <template>
   <div id="editInfo">
-    <!-- <app-header></app-header> -->
     <h1>Edit Business Information:</h1>
-    <!--    <form> -->
     <div class="full-container">
       <div class="details1">
         <h3>General Information</h3>
-        <!-- <div class="editName">
-        <label class="inputField" for="name">Name of Business: </label>
-        <input type="text" id="name" name="name" v-model="name" required />
-      </div> -->
         <div class="name">
           <h6>Business Name:</h6>
           <b-form-input
@@ -30,7 +24,6 @@
             required
           ></b-form-textarea>
         </div>
-        <!-- <hr /> -->
         <div class="editAmenities">
           <div id="changeAmenities">
             <h6>Amenities:</h6>
@@ -39,13 +32,7 @@
               </multiselect>
             </div>
           </div>
-          <!-- <br /> -->
-          <!-- <div id="existingAmenities"> -->
-          <!-- Existing Amenities: <b> {{ amenities }} </b> -->
-          <!-- <div v-for="v in this.amenities" :key="v.index">{{ v }}</div> -->
-          <!-- </div> -->
         </div>
-        <!-- <hr /> -->
         <div class="editPrice">
           <h6>Price:</h6>
           <b-input-group size="sm" prepend="$" append="/ hr" placeholder="0">
@@ -53,7 +40,6 @@
           </b-input-group>
         </div>
 
-        <!-- <hr /> -->
         <div class="editLocation">
           <h6>Location Address:</h6>
           <b-form-textarea
@@ -63,9 +49,7 @@
             trim
             required
           ></b-form-textarea>
-          <!-- <textarea v-model="exact_loc" row="20" cols="50"> </textarea> -->
         </div>
-        <!-- <hr /> -->
         <div class="region-neighbourhood">
           <div class="editRegion">
             <h6>Region:</h6>
@@ -86,13 +70,6 @@
               trim
               required
             ></b-form-input>
-            <!-- <input
-            type="text"
-            id="neighbourhood"
-            name="neighbourhood"
-            v-model="neighbourhood"
-            required
-          /> -->
           </div>
         </div>
         <div class="phoneNum">
@@ -107,8 +84,6 @@
         </div>
 
         <div class="submit-button">
-          <!-- <button v-if="!published" @click.prevent="save">Publish Listing</button>
-        <button v-if="published" @click.prevent="save">Save Changes</button> -->
           <b-button
             v-if="!published"
             @click.prevent="save"
@@ -132,12 +107,6 @@
           class="mb-2"
           multiple
         ></b-form-file>
-
-        <!-- <b-button @click="photos = []">Reset</b-button> -->
-
-        <!-- <p class="mt-2">
-          Selected file: <b>{{ photos }}</b>
-        </p> -->
 
         <vueper-slides
           bullets-outside
@@ -174,20 +143,6 @@
             ><b-icon icon="check-square" variant="success"></b-icon
           ></b-button>
         </b-button-group>
-
-        <!-- <div class="editPhotos">
-          Current Photos:
-          <br /><br />
-          <img class="place" v-bind:src="this.photo1" />
-          <img class="place" v-bind:src="this.photo2" />
-          <img class="place" v-bind:src="this.photo3" />
-          <br />
-          <br />
-          <br />
-          <label for="photos">Upload New Photos: </label>
-          <br /><br />
-          <upload></upload>
-        </div> -->
       </div>
 
       <div class="details3">
@@ -198,10 +153,6 @@
           class="mb-2"
           multiple
         ></b-form-file>
-
-        <!-- <p class="mt-2">
-          Selected file: <b>{{ menu }}</b>
-        </p> -->
 
         <vueper-slides
           bullets-outside
@@ -232,57 +183,19 @@
             ><b-icon icon="check-square" variant="success"></b-icon
           ></b-button>
         </b-button-group>
-
-        <!-- <multi
-          @upload-success="uploadImageSuccess"
-          @edit-image="editImage"
-          @mark-is-primary="markIsPrimary"
-          @limit-exceeded="limitExceeded"
-          @before-remove="beforeRemove"
-          id-upload="myIdUpload"
-          id-edit="myIdEdit"
-          :max-image="20"
-          primary-text="Default"
-          browse-text="Browse picture(s)"
-          drag-text="Drag pictures"
-          mark-is-primary-text="Set as default"
-          popup-text="This image will be displayed as default"
-          :multiple="true"
-          :show-edit="true"
-          :show-delete="true"
-          :show-add="true"
-        >
-        </multi> -->
-        <!-- <multi></multi> -->
-        <!-- <div class="editMenu">
-          Current Menu:
-          <br /><br />
-          <img v-bind:src="this.menu" />
-          <br /><br />
-          <label for="menu">Upload New Menu: </label>
-          <br /><br />
-          <uploadMenu></uploadMenu>
-          <br />
-        </div> -->
       </div>
-      <!--    </form> -->
       <br />
     </div>
   </div>
 </template>
 
 <script>
-// import Header from "../UI/Header.vue";
 import database from "../../firebase.js";
 import firebase from "firebase";
 import { MultiSelect } from "@progress/kendo-vue-dropdowns";
 import "@progress/kendo-theme-default/dist/all.css";
 import { VueperSlides, VueperSlide } from "vueperslides";
 import "vueperslides/dist/vueperslides.css";
-// import Upload from "./UploadPhoto.vue";
-// import multi from './Multiupload.vue';
-// import VueUploadMultipleImage from "vue-upload-multiple-image";
-// import UploadMenu from "./UploadMenu.vue";
 
 export default {
   data() {
@@ -297,8 +210,6 @@ export default {
       phoneNum: "",
       photos: [],
       cover_photo: "",
-      // photo2: "",
-      // photo3: "",
       price: 0,
       menu: [],
       amenities: [],
@@ -311,42 +222,25 @@ export default {
   },
 
   components: {
-    // "app-header": Header,
     multiselect: MultiSelect,
     "vueper-slides": VueperSlides,
     "vueper-slide": VueperSlide,
-    // upload: Upload,
-    // multi: multi,
-    // multi: VueUploadMultipleImage,
-    // uploadMenu: UploadMenu,
-  },
-
-  watch: {
-    photoIndex: function () {
-      console.log(this.photoIndex);
-    },
   },
 
   methods: {
     fetchID: async function () {
-      // var user = await firebase.auth().currentUser;
-      // console.log(user.uid);
-      // var userID = user.uid;
-      // this.bizID = userID;
 
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           var userID = user.uid;
           this.bizID = userID;
         }
-        console.log(this.bizID);
       });
     },
 
     fetchItems: async function () {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          console.log(this.bizID);
 
           database
             .collection("listings")
@@ -363,10 +257,7 @@ export default {
               this.name = toAdd.name;
               this.price = toAdd.price;
               this.amenities = toAdd.amenities;
-              // check again
               this.photos = toAdd.photos;
-              // this.photo2 = toAdd.photoURL2;
-              // this.photo3 = toAdd.photoURL3;
               this.menu = toAdd.menu;
               this.published = toAdd.published;
             });
@@ -375,8 +266,6 @@ export default {
     },
 
     save: async function () {
-      console.log("name", this.name);
-      console.log(this.bizID);
       database.collection("listings").doc(this.bizID).update({
         loc_filter: this.region,
         loc_neighbourhood: this.neighbourhood,
@@ -388,9 +277,6 @@ export default {
         phoneNum: this.phoneNum,
         published: true,
       });
-      console.log("bizid", this.bizID);
-      console.log(this.name);
-      console.log(this.exact_loc);
       alert("Information sucessfully updated!");
       location.reload();
     },
@@ -405,11 +291,9 @@ export default {
 
     uploadPhotos: function (e) {
       this.photoData = e.target.files;
-      console.log(e.target.files);
 
       if (this.photoData.length > 0) {
         for (var i = 0; i < this.photoData.length; i++) {
-          console.log("hello");
           var imageData = this.photoData[i];
           const storageRef = firebase
             .storage()
@@ -428,15 +312,11 @@ export default {
               this.uploadValue = 100;
               storageRef.snapshot.ref.getDownloadURL().then((url) => {
                 this.photos.push(url);
-                console.log(this.photos);
-                // this.img1 = url;
-                // console.log(this.img1);
               });
             }
           );
         }
       }
-      console.log(this.img);
     },
 
     deletePhoto: function () {
@@ -453,11 +333,9 @@ export default {
 
     uploadMenu: function (e) {
       this.photoData = e.target.files;
-      console.log(e.target.files);
 
       if (this.photoData.length > 0) {
         for (var i = 0; i < this.photoData.length; i++) {
-          console.log("hello");
           var imageData = this.photoData[i];
           const storageRef = firebase
             .storage()
@@ -476,15 +354,11 @@ export default {
               this.uploadValue = 100;
               storageRef.snapshot.ref.getDownloadURL().then((url) => {
                 this.menu.push(url);
-                console.log(this.menu);
-                // this.img1 = url;
-                // console.log(this.img1);
               });
             }
           );
         }
       }
-      console.log(this.img);
     },
     deleteMenu: function () {
       if (this.menu.length > 0) {
@@ -504,10 +378,6 @@ export default {
     this.fetchID();
     this.fetchItems();
   },
-
-  // updated: function() {
-  //     this.fetchItems()
-  // }
 };
 </script>
 
@@ -541,13 +411,6 @@ export default {
   text-align: left;
 }
 
-/* .editPrice {
-  text-align: left;
-}
-
-.editLocation {
-  text-align: left;
-} */
 
 .region-neighbourhood {
   display: flex;
@@ -653,37 +516,4 @@ h6 {
 .mb-2 {
   text-align: left;
 }
-
-/* .editName,
-.editAmenities,
-.editPrice,
-.editLocation,
-.editRegion,
-.editPhotos,
-.editNeighbourhood,
-.editMenu {
-  padding: 20px;
-  width: 50%;
-  margin: auto;
-} */
-
-/* textArea {
-  width: 80%;
-} */
-
-/* img {
-  width: 90%;
-} */
-/* 
-hr {
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
-  color: grey;
-  border: 1.5px solid grey;
-} */
 </style>

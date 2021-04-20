@@ -96,37 +96,6 @@ export default {
         document.getElementById("error-container").style.fontWeight = "500";
         document.getElementsByClassName("title")[0].style.marginBottom = "8px";
         });
-
-      //   firebase
-      //     .auth()
-      //     .signInWithEmailAndPassword(
-      //       this.loginform.email,
-      //       this.loginform.password
-      //     )
-      //     .then((userCredential) => {
-      //       var user = userCredential.user;
-      //       console.log(user);
-
-      //       if (!user.emailVerified) {
-      //         alert('Verify your email to continue');
-      //         firebase.auth().signOut();
-      //       } else {
-      //         this.$router.push({ path: "/" });
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       document.getElementById('error-container').innerHTML = "Invalid Email / Password"
-      //       document.getElementById('error-container').style.backgroundColor = 'rgb(255, 168, 168)';
-      //       document.getElementById('error-container').style.borderRadius = '20px';
-      //       document.getElementById('error-container').style.width = '72.5%';
-      //       document.getElementById('error-container').style.margin = 'auto';
-      //       document.getElementById('error-container').style.padding = '3px';
-      //       document.getElementById('error-container').style.marginBottom = '5px';
-      //       document.getElementById('error-container').style.fontFamily = '"Ubuntu", sans-serif';
-      //       document.getElementById('error-container').style.fontWeight = '500';
-      //       document.getElementsByClassName('title')[0].style.marginBottom = '8px';
-      //       console.log(err);
-      //     });
     },
   },
 };
