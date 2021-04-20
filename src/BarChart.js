@@ -7,7 +7,7 @@ export default {
     data: function () {
       return {
           options: {
-              legend: { display: true },
+              legend: { display: false },
               title: {
                 display: true
                 // text: 'Total Monthly Spendings on Bookings'

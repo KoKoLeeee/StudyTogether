@@ -7,7 +7,7 @@
         <!-- <br><br> -->
       <ul>
         <!-- <h3><b>Upcoming</b></h3> -->
-        <h1>Upcoming Bookings</h1>
+        <h1 class="subheader">Upcoming Bookings</h1>
         <br>
         <li class="segment" v-for="(booking, index) in newBookings" :key="index">
           <!-- picture -->
@@ -93,7 +93,7 @@
     </div>
 
     <div class="past-booking-list" v-if="pastBookings.length > 0">
-        <h1>Past Bookings</h1>
+        <h1 class="subheader">Past Bookings</h1>
       <ul>
         <li class="segment" v-for="booking in pastBookings" :key="booking.index">
           <!-- picture -->
@@ -523,7 +523,7 @@ li {
   border-bottom: 2px solid wheat;
 }
 
-h1 {
+.subheader {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 40px;
   margin-bottom: 15px;

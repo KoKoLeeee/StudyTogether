@@ -1,17 +1,25 @@
 <template>
 	<div class="chart">
         <app-header></app-header>
-		<h1>Business Statistics</h1>
-        <button v-on:click.prevent ="show()">Show My Statistics</button>
-        <br><br>
-        <form v-show="isLoaded">
-            Select Duration:
+		<h1 class="subheader">Business Statistics</h1>
+        <b-button
+              class="button"
+              variant="outline-success"
+              v-if="showStatistics == false"
+              v-on:click.prevent="show()"
+              >Show My Statistics</b-button
+            >
+        <!-- <button v-on:click.prevent ="show()">Show My Statistics</button>
+        <br><br> -->
+        <div class="charts">
+        <form v-if="isLoaded">
+            Search Data By:
             <select @change="changeDuration" v-model="selectedDuration">
                 <option v-bind:key="item" v-for="item in selectDuration"> {{item}}</option> 
             </select>
         </form>
-        <br>
-        <form v-show="isLoaded && duration=='Monthly'">
+        <form v-if="isLoaded && duration=='Monthly'">
+            <br>
             Select metric to track:
             
             <select @change="changeHandlerMonth" v-model="selectedMonthly">
@@ -23,10 +31,10 @@
                 <option v-bind:key="item" v-for="item in selectTypeArrMonthly"> {{item}} </option> 
             </select>
         </form>
-        <br>
 		<bar-chart-month :chart-data="dataColMonthly" v-if="selectedTypeMonthly=='Bar' && isLoaded && duration=='Monthly'"></bar-chart-month>
         <line-chart-month :chart-data="dataColMonthly" v-if="selectedTypeMonthly=='Line' && isLoaded && duration=='Monthly'"></line-chart-month>
-        <form v-show="isLoaded && duration=='Timeslots'">
+        <form v-if="isLoaded && duration=='Timeslots'">
+            <br>
             Select metric to track:
             <select @change="changeHandlerTime" v-model="selectedTime">
                 <option v-bind:key="item" v-for="item in selectArrTime"> {{item}} </option> 
@@ -40,7 +48,7 @@
         <br>
 		<bar-chart-time :chart-data="dataColTime" v-if="selectedTypeTime=='Bar' && isLoaded && duration=='Timeslots'"></bar-chart-time>
         <line-chart-time :chart-data="dataColTime" v-if="selectedTypeTime=='Line' && isLoaded && duration=='Timeslots'"></line-chart-time>
-
+        </div>
 	</div>
 </template>
 
@@ -106,6 +114,8 @@ export default {
             selectedTypeTime: 'Bar',
             selectTypeArrTime: ['Bar', 'Line'],
 
+            showStatistics: false,
+
         }
     },
 
@@ -119,6 +129,7 @@ export default {
 
     methods: {
         show() {
+            this.showStatistics = true;
             this.isLoaded = true
         },
 
@@ -446,4 +457,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.subheader {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 40px;
+  margin-bottom: 15px;
+  width: 30%;
+  margin: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 2px solid grey;
+}
+
+.button {
+    margin-top: 15px;
+}
+.charts {
+    margin-top: 15px;
+}
+</style>

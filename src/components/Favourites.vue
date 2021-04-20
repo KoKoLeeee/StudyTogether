@@ -1,7 +1,7 @@
 <template>
   <div class="favourites list">
     <app-header></app-header>
-    <h1>Favourites</h1>
+    <h1 class="subheader">Favourites</h1>
     <ul class="favourites-list">
       <li class="segment" v-for="(listing, index) in list" :key="index">
         <img :src="listing.cover_photo" alt="picture" class="main-pic" />
@@ -264,7 +264,7 @@ li {
 }
 
 
-h1 {
+.subheader {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 40px;
   margin-bottom: 15px;

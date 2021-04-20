@@ -1,19 +1,16 @@
 <template>
   <div>
-    <app-header></app-header>
+    <!-- <app-header></app-hesader> -->
     <h1>Edit Booking Timings</h1>
 
     <div class="float-container">
       <div class="float-left">
+        <h3>Select a date to start</h3>
         <v-date-picker v-model="date" :min-date="new Date()"></v-date-picker>
       </div>
       <div class="float-right">
         <div class="timeslot">
           <div v-if="dateSelected && availableTime">
-            <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
-              >Add Timeslots</b-button
-            >
-            <button v-on:click="selectAll()">Select All</button>
             <h3>Time: Pax</h3>
             <label
               class="timing-listing"
@@ -24,9 +21,29 @@
               <input type="checkbox" v-bind:value="slot" v-model="selected" />
               <span class="checkmark"></span>
             </label>
-            <input v-model.number="pax" placeholder="Input pax limit" />
-            <button v-on:click="update()">Update Pax</button>
-            <button v-on:click="del()">Delete Timeslot</button>
+            <div>
+            <b-input-group class="paxupdate">
+              <b-form-input v-model.number="pax" placeholder="PAX Limit"></b-form-input>
+              <b-input-group-append>
+                <b-button variant="outline-success" v-on:click="update()"><b-icon icon="arrow-repeat"></b-icon></b-button>
+                 <b-button variant="outline-secondary" v-on:click="selecttAll()"><b-icon icon="check-square"></b-icon></b-button>
+                 <b-button variant="outline-secondary" v-b-modal.modal-prevent-closing
+              ><b-icon icon="plus"></b-icon></b-button
+            >
+            <b-button variant="danger" v-on:click="del()"
+              ><b-icon icon="trash"></b-icon></b-button
+            >
+              </b-input-group-append>
+            </b-input-group>
+            </div>
+
+            <!-- <input v-model.number="pax" placeholder="Input pax limit" />
+            <button v-on:click="update()">Update Pax</button> -->
+            <!-- <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
+              >Add Timeslots</b-button
+            >
+            <button v-on:click="selectAll()">Select All</button>
+            <button v-on:click="del()">Delete Timeslot</button> -->
           </div>
           <div v-else-if="dateSelected">
             <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
@@ -34,7 +51,7 @@
             >
             <h3>No timeslots available</h3>
           </div>
-          <div v-else>Choose a date to start</div>
+          <!-- <div v-else>Choose a date to start</div> -->
 
           <div>
             <!-- <modal
@@ -144,7 +161,7 @@
 </template>
 
 <script>
-import Header from "../UI/Header.vue";
+// import Header from "../UI/Header.vue";
 import firebase from "firebase";
 import database from "../../firebase.js";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
@@ -170,7 +187,7 @@ export default {
   },
 
   components: {
-    "app-header": Header,
+    // "app-header": Header,
     "v-date-picker": DatePicker,
     // modal: modal,
   },
@@ -189,7 +206,12 @@ export default {
     },
 
     selectAll: function () {
-      this.selected = this.timeslots;
+      if (this.selected.length == this.timeslots.length) {
+        this.selected.splice(0);
+      } else {
+        this.selected.splice(0);
+        this.selected.push(...this.timeslots);
+      }
     },
 
     // showModal: function () {
@@ -393,14 +415,13 @@ export default {
         var time = this.selected[i]["time"];
         console.log("update: " + time);
         var updatedValue = this.pax;
-        this.selected[i]["pax"] = updatedValue
-        docRef
-          .update({
-            [time]: updatedValue, //update the firebase
-          })
-          // .then(() => location.reload());
+        this.selected[i]["pax"] = updatedValue;
+        docRef.update({
+          [time]: updatedValue, //update the firebase
+        });
+        // .then(() => location.reload());
       }
-      this.pax = ""
+      this.pax = "";
       this.selected = new Array();
     },
 
@@ -422,13 +443,12 @@ export default {
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i]["time"];
         console.log("delete: " + time);
-        var index = this.timeslots.indexOf(this.selected[i])
-        this.timeslots.splice(index,1)
-        docRef
-          .update({
-            [time]: FieldValue.delete(), //delete field in firebase
-          })
-          // .then(() => location.reload());
+        var index = this.timeslots.indexOf(this.selected[i]);
+        this.timeslots.splice(index, 1);
+        docRef.update({
+          [time]: FieldValue.delete(), //delete field in firebase
+        });
+        // .then(() => location.reload());
       }
       this.selected = new Array();
     },
@@ -511,32 +531,48 @@ select {
   font-size: 15px;
 }
 .float-container {
+  width: 70%;
   display: flex;
   align-items: center;
   margin: auto;
 }
-.float-left,
+
+/* .float-left,
 .float-right {
   flex: 1;
   height: 100%;
   width: 50%;
   overflow: auto;
-}
+} */
+
 .float-left {
   width: 50%;
   float: left;
-  padding: 20px;
-  border: 2px;
+  padding-top: 20px;
+  margin: 0;
+  margin-left: auto;
+  height: 60vh;
+  /* padding: 20px; */
+  /* border: 2px; */
 }
+
 .float-right {
+  padding-top: 20px;
   width: 50%;
   float: right;
-  padding: 20px;
-  border: 2px;
+  margin: auto;
+  border-left: 2px solid grey;
+  height: 60vh;
 }
 .timeslot {
   width: 100%;
   margin: auto;
   font-size: 18px;
 }
+
+.paxupdate {
+    width: 60%;
+    margin: auto;
+}
+
 </style>

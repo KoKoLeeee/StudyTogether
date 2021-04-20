@@ -1,10 +1,11 @@
 <template>
   <div id="editInfo">
-    <app-header></app-header>
+    <!-- <app-header></app-header> -->
     <h1>Edit Business Information:</h1>
     <!--    <form> -->
-    <div class="container">
+    <div class="full-container">
       <div class="details1">
+        <h3>General Information</h3>
         <!-- <div class="editName">
         <label class="inputField" for="name">Name of Business: </label>
         <input type="text" id="name" name="name" v-model="name" required />
@@ -104,7 +105,6 @@
             required
           ></b-form-input>
         </div>
-        
 
         <div class="submit-button">
           <!-- <button v-if="!published" @click.prevent="save">Publish Listing</button>
@@ -125,6 +125,7 @@
       </div>
 
       <div class="details2">
+        <h3>Gallery</h3>
         <b-form-file
           @change="uploadPhotos"
           ref="file-input"
@@ -142,7 +143,7 @@
           bullets-outside
           class="photo-slides"
           :bullets="false"
-          :arrows-outside="false"
+          :arrows-outside="true"
           :disableArrowsOnEdges="true"
           :infinite="false"
           fixed-height="200px;"
@@ -156,10 +157,11 @@
           />
         </vueper-slides>
 
-        <b-button @click="photos = []">Reset</b-button>
+        <b-button-group>
+          <b-button @click="photos = []" variant="outline-secondary"><b-icon icon="arrow-clockwise"  variant="danger"></b-icon></b-button>
 
         <b-button @click.prevent="deletePhoto" variant="outline-secondary"
-          >Delete Current Photo</b-button
+          ><b-icon icon="trash"></b-icon></b-button
         >
 
         <b-button @click.prevent="saveCover" variant="outline-secondary"
@@ -167,8 +169,11 @@
         >
 
         <b-button @click.prevent="savePhotos" variant="outline-secondary"
-          >Save Photos</b-button
+          ><b-icon icon="check-square" variant="success"></b-icon></b-button
         >
+        </b-button-group>
+
+        
         <!-- <div class="editPhotos">
           Current Photos:
           <br /><br />
@@ -185,15 +190,13 @@
       </div>
 
       <div class="details3">
+        <h3>Menu</h3>
         <b-form-file
-
           @change="uploadMenu"
           ref="file-input"
           class="mb-2"
           multiple
         ></b-form-file>
-
-        
 
         <!-- <p class="mt-2">
           Selected file: <b>{{ menu }}</b>
@@ -217,15 +220,21 @@
           />
         </vueper-slides>
 
-        <b-button @click="menu = []">Reset</b-button>
-
-        <b-button @click.prevent="deleteMenu" variant="outline-secondary"
-          >Delete Current Menu</b-button
+        <b-button-group>
+          <b-button @click="menu = []" variant="outline-secondary"><b-icon icon="arrow-clockwise"  variant="danger"></b-icon></b-button>
+          <b-button @click.prevent="deleteMenu" variant="outline-secondary"
+          ><b-icon icon="trash"></b-icon></b-button
         >
-
-        <b-button @click.prevent="saveMenu" variant="outline-secondary"
-          >Save Menu</b-button
+          <b-button @click.prevent="saveMenu" variant="outline-secondary"
+          ><b-icon icon="check-square" variant="success"></b-icon></b-button
         >
+        </b-button-group>
+
+        
+
+        
+
+        
         <!-- <multi
           @upload-success="uploadImageSuccess"
           @edit-image="editImage"
@@ -265,7 +274,7 @@
 </template>
 
 <script>
-import Header from "../UI/Header.vue";
+// import Header from "../UI/Header.vue";
 import database from "../../firebase.js";
 import firebase from "firebase";
 import { MultiSelect } from "@progress/kendo-vue-dropdowns";
@@ -304,7 +313,7 @@ export default {
   },
 
   components: {
-    "app-header": Header,
+    // "app-header": Header,
     multiselect: MultiSelect,
     "vueper-slides": VueperSlides,
     "vueper-slide": VueperSlide,
@@ -338,7 +347,7 @@ export default {
           this.listingDetail = toAdd;
           this.region = toAdd.loc_filter;
           this.description = toAdd.description;
-          this.phoneNum = toAdd.phoneNum
+          this.phoneNum = toAdd.phoneNum;
           this.neighbourhood = toAdd.loc_neighbourhood;
           this.exact_loc = toAdd.exact_loc;
           this.name = toAdd.name;
@@ -356,7 +365,7 @@ export default {
     },
 
     save: async function () {
-      console.log("name", this.name)
+      console.log("name", this.name);
       database.collection("listings").doc(this.bizID).update({
         loc_filter: this.region,
         loc_neighbourhood: this.neighbourhood,
@@ -368,9 +377,9 @@ export default {
         phoneNum: this.phoneNum,
         published: true,
       });
-      console.log("bizid", this.bizID)
+      console.log("bizid", this.bizID);
       console.log(this.name);
-      console.log(this.exact_loc)
+      console.log(this.exact_loc);
       alert("Information sucessfully updated!");
     },
 
@@ -416,18 +425,18 @@ export default {
         }
       }
       console.log(this.img);
-      
     },
 
     deletePhoto: function () {
       if (this.photos.length > 0) {
         this.photos.splice(this.photoIndex, 1);
+        alert('Photo deleted!')
       }
     },
 
     saveCover: function () {
       this.cover_photo = this.photos[this.photoIndex];
-      alert("Cover photo selected!");
+      alert("Cover photo saved!");
     },
 
     uploadMenu: function (e) {
@@ -464,11 +473,12 @@ export default {
         }
       }
       console.log(this.img);
-      
     },
     deleteMenu: function () {
       if (this.menu.length > 0) {
         this.menu.splice(this.menuIndex, 1);
+        alert("Menu deleted!");
+
       }
     },
     saveMenu: function () {
@@ -511,21 +521,22 @@ export default {
   margin: auto;
 }
 
-.name, .description, .phoneNum {
+.name,
+.description,
+.phoneNum,
+.editAmenities,
+.editPrice,
+.editLocation {
   text-align: left;
 }
 
-.editAmenities {
-  text-align: left;
-}
-
-.editPrice {
+/* .editPrice {
   text-align: left;
 }
 
 .editLocation {
   text-align: left;
-}
+} */
 
 .region-neighbourhood {
   display: flex;
@@ -570,6 +581,7 @@ export default {
   border-bottom: 2px solid grey;
 }
 
+.description,
 .editAmenities,
 .editPrice,
 .editLocation,
@@ -581,7 +593,8 @@ export default {
   padding-top: 8px;
 }
 
-.container {
+.full-container {
+  width: 90%;
   display: flex;
   margin: auto;
 }
@@ -606,6 +619,12 @@ export default {
   overflow: auto;
 }
 
+.photo-slides {
+  width: 75%;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
 .details3 {
   float: right;
   margin-left: auto;
@@ -618,6 +637,10 @@ export default {
 
 h6 {
   padding-left: 2px;
+}
+
+.mb-2 {
+  text-align: left;
 }
 
 /* .editName,
