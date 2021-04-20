@@ -17,6 +17,9 @@ import EditTimeslots from './components/Business/EditTimeslots.vue';
 import BizDashboard from './components/Business/Dashboard/BizDashboard.vue'
 import ChatRoom from './components/ChatRoom.vue';
 
+import firebase from 'firebase'
+import database from './firebase';
+
 
 export default [
 	{
@@ -48,24 +51,78 @@ export default [
 	},
 	{
 		path: "/userChart",
-		component: userChart
+		component: userChart,
+		meta: { auth: "customer" },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a customer to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 	{
 		path: "/forgotpassword",
 		component: ForgotPassword,
-		meta: { auth: "customer" },
 	},
 	{
 		path: "/favourites",
 		name: "favourites",
 		component: Favourites,
 		meta: { auth: "customer" },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a customer to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 	{
 		path: "/reviews/:id",
 		component: Reviews,
 		props: true,
 		meta: { auth: "customer" },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a customer to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 	{
 		path: "/listings/:id/reserve",
@@ -73,52 +130,127 @@ export default [
 		component: Reservation,
 		props: true,
 		meta: { auth: "customer" },
-		// beforeEnter: (to, from, next) => {
-		//     firebase.auth().onAuthStateChanged(user => {
-		//         if (user) {
-		//             next();
-		//         } else {
-		//             next('/login');
-		//         }
-		//     })
-		// }
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a customer to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 	{
 		path: "/mybiz",
 		name: "business",
 		component: MyBusiness,
 		meta: { auth: "owner" },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a business owner to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 	{
 		path: "/bizsignup",
 		component: BusinessSignup,
 	},
-	{
-		path: "/info",
-		name: "info",
-		component: Information,
-		meta: { auth: "owner" },
-	},
+	// {
+	// 	path: "/info",
+	// 	name: "info",
+	// 	component: Information,
+	// 	meta: { auth: "owner" },
+		
+	// },
 	{
 		path: "/bizBookings",
 		component: BizBookings,
 		meta: { auth: "owner" },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a business owner to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
-	{
-		path: "/edit",
-		name: "edit",
-		component: EditTimeslots,
-		props: true,
-		meta: { auth: "owner" },
-	},
+	// {
+	// 	path: "/edit",
+	// 	name: "edit",
+	// 	component: EditTimeslots,
+	// 	props: true,
+	// 	meta: { auth: "owner" },
+	// },
 	{
 		path: '/bizdashboard',
 		component: BizDashboard,
-		meta: { auth: 'owner' }
+		meta: { auth: 'owner' },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					database.collection('users').doc(user.uid).get().then(snapshot => {
+						const data = snapshot.data()
+						const usertype = data.usertype;
+						if (usertype == to.meta.auth) {
+							next();
+						} else {
+							alert('Log in as a business owner to acess!')
+							next(from);
+						}
+					})
+				} else {
+					next('/login')
+				}
+			})
+		}
 	},
 
 	{
 		path: '/chat',
-		component: ChatRoom
+		component: ChatRoom,
+		meta: { requiredAuth: true },
+		beforeEnter: (to, from, next) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					next()
+				} else {
+					alert('Log in to have access!')
+					next(from);
+				}
+			})
+		}
 	}
 ];
