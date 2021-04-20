@@ -87,7 +87,6 @@ export default {
         )
         .then((userCredential) => {
           var user = userCredential.user;
-          console.log(user);
 
           if (!user.emailVerified) {
             alert("Verify your email to continue");
@@ -118,7 +117,6 @@ export default {
           document.getElementById("error-container").style.fontWeight = "500";
           document.getElementsByClassName("title")[0].style.marginBottom =
             "8px";
-          console.log(err);
         });
     },
   },

@@ -90,7 +90,6 @@ export default {
       var date = this.date.getDate();
       if (date < 10) {
         date = "0" + date;
-        console.log(date);
       }
       var month = this.date.getMonth() + 1;
       if (month < 10) {
@@ -99,7 +98,6 @@ export default {
       var year = this.date.getYear() % 100;
 
       var fulldate = date + month + year;
-      console.log(fulldate);
 
       database
         .collection("listings")
@@ -108,7 +106,6 @@ export default {
         .doc(fulldate)
         .get()
         .then((snapshot) => {
-          console.log(snapshot.data());
 
           if (snapshot.exists) {
             const data = snapshot.data();
@@ -116,12 +113,10 @@ export default {
             this.timeslot = [];
 
             Object.keys(data).map((time) => {
-              console.log(time);
 
               var now = new Date();
 
               if (data[time] >= this.pax) {
-                console.log("test1");
 
                 var startTime = Number(time.substring(0, 2));
                 if (
@@ -135,7 +130,6 @@ export default {
                     0
                   ) > now
                 ) {
-                  console.log("test2");
                   this.availableTime = true;
                   this.timeslot.push(time);
                 }
@@ -145,8 +139,6 @@ export default {
             this.timeslot = this.timeslot.filter((element) => {
               return element !== undefined;
             });
-
-            console.log(this.timeslot);
 
             this.timeslot.sort();
           } else {
@@ -162,13 +154,11 @@ export default {
     },
 
     fetchItems: function() {
-      console.log("hi")
       var locationID = this.$route.params.id;
       
       database.collection('listings').doc(locationID).get().then(snapshot => {
         const toAdd = snapshot.data();
         this.price = toAdd.price;
-        console.log(this.price)
       });
     },
 
@@ -177,15 +167,10 @@ export default {
       var locationID = this.$route.params.id;
       var dateString = this.date.toDateString()
       let monthString = dateString.slice(4,7)
-      console.log(monthString)
       var someArr = []
  
-      console.log("check if empty")
-      console.log("check this id", locationID)
       await database.collection('listings').doc(locationID).collection('monthlyData').doc(monthString).get().then(querySnapshot => {
-        console.log("checking...")
         if(!querySnapshot.exists) {
-          console.log("its empty")
           database.collection('listings').doc(locationID).collection('monthlyData').doc(monthString).set({
           month: monthString,
           bookings: Number(0),
@@ -196,12 +181,10 @@ export default {
         }
       })
       await database.collection('listings').doc(locationID).collection('monthlyData').doc(monthString).get().then(querySnapshot => {
-        console.log(querySnapshot.id, "=>", querySnapshot.data())
         let data = {...querySnapshot.data(), ['id']: querySnapshot.id}
         someArr.push(data)
       })
     
-        console.log(someArr)
         return someArr
     },
 
@@ -211,9 +194,7 @@ export default {
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i];
         await database.collection("listings").doc(locationID).collection("timeslotsData").doc(time).get().then((snapshot) => {
-          console.log("dont have doc1")
           if(!snapshot.exists) {
-            console.log("dont have doc")
             database.collection('listings').doc(locationID).collection('timeslotsData').doc(time).set({
               bookings: 0,
               revenue: 0,
@@ -227,11 +208,9 @@ export default {
             await database.collection("listings").doc(locationID).collection("timeslotsData").doc(time1).get().then((snapshot) => {
               const timeData = snapshot.data();
               currTData.push({time: snapshot.id, currTBookings: Number(timeData.bookings), currTRevenue: Number(timeData.revenue)})
-              console.log("curr time bookings", "=>", timeData.bookings)
             })
 
       }
-      console.log(currTData)
       return currTData
     },
 
@@ -294,55 +273,33 @@ export default {
           }
         });
 
-      console.log(this.currTData)
 
       database.collection("bookings").add(data);
 
       // get month doc id and currbookings and currrevenue
-      var dateString = this.date.toDateString()
-      let monthString = dateString.slice(4,7)
-      console.log(monthString)
       
       var currMBookings = 0
       var currMRevenue = 0
       var result = await this.updateMData()
-      console.log(result)
       result.forEach(doc => {
         currMBookings += Number(doc.bookings)
         currMRevenue += Number(doc.revenue)
         this.monthID += doc.id
-        console.log(doc.id)
       })
-  
 
-      console.log("currBookings", currMBookings)
-      console.log("currRevenue", currMRevenue)
-      console.log("what's the issue1")
-
-      console.log(locationID)
       var newMBookings = Number(Number(currMBookings) + Number(this.pax)*Number(this.selected.length))
-      console.log(this.selected.length)
-      console.log(this.pax)
-      console.log(this.price)
       var newMRevenue = Number(Number(currMRevenue) + Number((this.pax*this.price*this.selected.length)))
 
         // update monthlyData
-      console.log("month to add data in", this.monthID)
-      console.log("new revenue", this.newMRevenue)
       await database.collection('listings').doc(locationID).collection('monthlyData').doc(this.monthID).update({
         bookings: Number(newMBookings),
         revenue: Number(newMRevenue)
       })
-      console.log("what's the issue2")
 
       var result2 = await this.updateTData()
-      console.log("result2", "=>", result2[0].time)
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i];
-        console.log("selected time", time)
         var dataToAdd = result2[i];
-        console.log("check selected time", time)
-        console.log("current time bookings", "=>", dataToAdd.currTBookings)
         var newTBookings = Number(Number(dataToAdd.currTBookings) + Number(this.pax));
         var newTRevenue = Number(dataToAdd.currTRevenue + (this.pax*this.price))
         await database.collection('listings').doc(locationID).collection('timeslotsData').doc(time).update({
@@ -350,8 +307,6 @@ export default {
           revenue: newTRevenue
         })
       }
-
-      console.log("done")
       alert("Booking successful!");
       this.$router.push({ path: "/listings" });
     

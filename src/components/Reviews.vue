@@ -109,17 +109,12 @@ export default {
         .then((snapshot) => {
           const toAdd = snapshot.data();
           this.listingDetail = toAdd;
-          console.log(toAdd);
-          console.log(this.listingDetail);
-          console.log(this.$route.params.id);
-          console.log(this.$route.query.date);
         });
     },
 
     updateData: async function () {
       const locationID = this.$route.params.id;
       var monthString = this.$route.query.date;
-      console.log(monthString);
       var someArr = [];
       await database
         .collection("listings")
@@ -128,9 +123,7 @@ export default {
         .doc(monthString)
         .get()
         .then((querySnapshot) => {
-          console.log("checking...");
           if (!querySnapshot.exists) {
-            console.log("its empty");
             database
               .collection("listings")
               .doc(locationID)
@@ -146,12 +139,10 @@ export default {
                 numRatings: Number(0),
               });
           }
-          console.log(querySnapshot.id, "=>", querySnapshot.data());
           let data = { ...querySnapshot.data(), ["id"]: querySnapshot.id };
           someArr.push(data);
         });
 
-      console.log(someArr);
       return someArr;
     },
 
@@ -204,28 +195,18 @@ export default {
         .then(() => console.log("review sent and past booking deleted"));
 
       // get month doc id and currbookings and currrevenue
-      var monthString = this.$route.query.date;
-      console.log(monthString);
-
       var result = await this.updateData();
-      console.log(result);
 
       var currNumRatings = Number(0);
       var currTotalRatings = Number(0);
-      var currRatings = Number(0);
 
       result.forEach((doc) => {
         currNumRatings += Number(doc.numRatings);
         currTotalRatings += Number(doc.totalRatings);
-        currRatings += Number(doc.ratings);
         this.monthID += doc.id;
-        console.log(doc.id);
       });
 
-      console.log("currentRatings", currRatings);
       var locationID = this.$route.params.id;
-      console.log(locationID);
-      console.log("month", this.monthID);
 
       var newNumRatings = Number(Number(currNumRatings) + 1);
 
@@ -235,7 +216,6 @@ export default {
       var newAvgRating = Number(
         Math.round((Number(newRatingTotal) / Number(newNumRatings)) * 2) / 2
       );
-      console.log("new rating", newAvgRating);
 
       await database
         .collection("listings")
@@ -267,8 +247,6 @@ export default {
           var newAvgNoise = Number(
             Math.round(Number(newNoiseTotal) / Number(newNumRatings))
           );
-          console.log(newNoiseTotal);
-          console.log(newAvgNoise);
           database
             .collection("listings")
             .doc(locationID)

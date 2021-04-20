@@ -165,7 +165,6 @@ export default {
             const timeslots = database.collection('listings').doc(loc).collection('timeslots').doc(stringOfVisitDate)
         
             for(var booking of arrOfBookings) {
-                console.log(booking)
                 timeslots.update({
                     [booking] :increasePax
                 })

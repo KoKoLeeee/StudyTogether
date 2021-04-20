@@ -351,38 +351,13 @@ export default {
     "app-header": Header,
   },
 
-  watch: {
-    location: function () {
-      console.log(this.location)
-    },
-
-    searchString: function() {
-      console.log(this.searchString)
-    },
-    noise: function() {
-      console.log(typeof this.noise[0])
-    },
-    price: function() {
-      console.log(this.price)
-    },
-
-    sortBy: function() {
-      console.log(this.sortBy)
-    }
-  },
-
   computed: {
     //computed method to watch over search, filter and sort to update displayed list
     displayedList: function () {
       let tempList = this.list;
 
-      console.log("computed");
-
       //search method
       if (this.searchString != "" && this.searchString) {
-        tempList.map((item) => {
-          console.log(item.name);
-        });
         tempList = tempList.filter((item) =>
           item.name.toLowerCase().includes(this.searchString.toLowerCase())
         );
@@ -404,16 +379,12 @@ export default {
         noise = this.noise;
       }
 
-      console.log(tempList);
-
       tempList = tempList.filter(
         (x) =>
           location.includes(x["loc_filter"]) &&
           price.includes(x["price_filter"]) &&
           noise.includes(x["noise"])
       );
-
-      console.log(tempList);
 
       //sort method
       if (this.sortBy == "Name") {
@@ -435,21 +406,11 @@ export default {
         tempList.reverse();
       }
 
-      console.log(tempList)
-
       return tempList;
     },
   },
 
   methods: {
-    showModal() {
-      this.isModalVisible = true;
-      console.log(this.isModalVisible);
-    },
-    closeModal() {
-      this.isModalVisible = false;
-    },
-
     fetchItems: async function () {
       await database
         .collection("listings")
@@ -458,7 +419,6 @@ export default {
           let item = {};
           querySnapShot.docs.forEach((doc) => {
             item = { ...doc.data(), ["id"]: doc.id };
-            console.log(item);
             if (item["published"] == true) {
               if (item["price"] <= 10) {
                 item["price_filter"] = "cheap";
@@ -473,7 +433,6 @@ export default {
         });
 
       this.displayedList = this.list;
-      console.log(this.list);
 
       let user = firebase.auth().currentUser;
       await database
@@ -487,35 +446,22 @@ export default {
           this.favourites = fav;
         });
 
-      console.log(this.favourites);
     },
 
     route: async function(event) {
       this.docid = event.target.getAttribute("id");
-      console.log(this.docid)
-      var currDate = new Date()
-      let dateInString = currDate.toDateString()
-      let monthString = dateInString.slice(4,7)
-      console.log(monthString)
 
       var result = await this.fetchClicks()
-      console.log(result)
       var monthClicks = 0;
       var monthID = '';
 
       result.forEach(doc => {
         monthClicks += Number(doc.clicks)
-        console.log("clicks1", doc.clicks)
-        console.log("clicks2", monthClicks)
         monthID += doc.id
-        console.log(doc.id)
       })
-      console.log("clicks3", monthClicks)
       await database.collection('listings').doc(this.docid).collection('monthlyData').doc(monthID).update({
         clicks: Number(monthClicks + 1)
       })
-
-      console.log(this.docid);
       this.$router.push({name:"indiv", params: {id:this.docid}});
     },
 
@@ -526,13 +472,8 @@ export default {
       let monthString = dateInString.slice(4,7)
 
       var someArr = []
-    //  try {
-        console.log("check if empty")
-        console.log("check this id", this.docid)
         await database.collection('listings').doc(this.docid).collection('monthlyData').doc(monthString).get().then(querySnapshot => {
-          console.log("checking...")
           if(!querySnapshot.exists) {
-            console.log("its empty")
             database.collection('listings').doc(this.docid).collection('monthlyData').doc(monthString).set({
               month: monthString,
               bookings: Number(0),
@@ -545,13 +486,9 @@ export default {
           }
         })
         await database.collection('listings').doc(this.docid).collection('monthlyData').doc(monthString).get().then(querySnapshot => {
-            console.log(querySnapshot.id, "=>", querySnapshot.data())
             let data = {...querySnapshot.data(), ['id']: querySnapshot.id}
             someArr.push(data)
           }) 
-    
-  
-      console.log("check", someArr)
       return someArr;
     
 
@@ -559,10 +496,8 @@ export default {
 
     bookmark: async function (event) {
       //add the place to favourites
-      console.log('bookmark')
       let doc_id = event.currentTarget.getAttribute("id");
       let user = firebase.auth().currentUser;
-      console.log(user.uid)
       await database
         .collection("users")
         .doc(user.uid)
@@ -584,8 +519,6 @@ export default {
             this.favourites.push(doc_id);
           }
 
-          console.log(fav);
-
           database
             .collection("users")
             .doc(user.uid)
@@ -596,8 +529,6 @@ export default {
     unbookmark: function (event) {
       let doc_id = event.currentTarget.getAttribute("id");
       let user = firebase.auth().currentUser;
-
-      console.log(doc_id);
 
       this.favourites = this.favourites.filter(function (value) {
         return value != doc_id;

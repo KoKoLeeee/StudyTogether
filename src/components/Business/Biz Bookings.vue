@@ -171,7 +171,6 @@ export default {
             .where("date", "<", endDate)
             .get()
             .then((querySnapShot) => {
-              console.log(startDate.toDate().toDateString());
               querySnapShot.docs.forEach(async function (doc) {
                 let data = doc.data();
                 let customerName = data["name"];

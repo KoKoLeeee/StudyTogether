@@ -165,9 +165,6 @@ export default {
       var year = this.date.getYear() % 100;
 
       this.fulldate = date + month + year;
-      console.log(this.fulldate);
-
-      console.log("id: " + this.bizID);
 
       database
         .collection("listings")
@@ -237,7 +234,6 @@ export default {
         } //create string representation of the time slots
         newSlots.push({ [startStr + " - " + endStr]: this.pax }); //collect the new timeslots
         startHour = endSlot;
-        console.log(newSlots);
       } //end of while loop
 
       if (this.applyMonth) {
@@ -267,8 +263,6 @@ export default {
             date = "0" + day;
           }
           var fulldate = date + month + year; //date of that specific day
-          console.log(fulldate);
-
           var docRef = database
             .collection("listings")
             .doc(this.bizID)
@@ -279,12 +273,10 @@ export default {
             if (snapshot.exists) {
               //alr have existing timeslots
               for (var j = 0; j < newSlots.length; j++) {
-                console.log("update" + newSlots[j]);
                 docRef.update(newSlots[j]);
               }
             } else {
               //empty doc
-              console.log("set" + newSlots[0]);
               docRef.set(newSlots[0]);
               for (var k = 1; k < newSlots.length; k++) {
                 docRef.update(newSlots[k]);
@@ -335,7 +327,6 @@ export default {
 
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i]["time"];
-        console.log("update: " + time);
         var updatedValue = this.pax;
         this.selected[i]["pax"] = updatedValue;
         docRef.update({
@@ -362,7 +353,6 @@ export default {
 
       for (var i = 0; i < this.selected.length; i++) {
         var time = this.selected[i]["time"];
-        console.log("delete: " + time);
         var index = this.timeslots.indexOf(this.selected[i]);
         this.timeslots.splice(index, 1);
         docRef.update({
@@ -375,7 +365,6 @@ export default {
 
   created() {
     this.fetchID();
-    console.log(this.bizID);
   },
 };
 </script>

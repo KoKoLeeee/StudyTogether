@@ -84,42 +84,32 @@ export default {
 
     fetchItems: async function () {
       var listArr = await this.getListing();
-      console.log("get listings" + listArr);
 
       var user = firebase.auth().currentUser;
-
-      console.log(user);
 
         await database.collection('users').doc(user.uid).get().then(snapshot => {
             const data = snapshot.data();
             this.idList = data.favourites;
-            console.log(this.idList)
         })
 
       for (var j = 0; j < listArr.length; j++) {
-          console.log(this.idList)
-          console.log(listArr[j].id)
-            console.log(this.idList.includes(listArr[j].id))
         if (this.idList.includes(listArr[j].id)) {
             this.list.push(listArr[j]);
         }
       }
 
-      console.log(this.list);
     },
 
     remove: function (event) {
       let index = event.currentTarget.getAttribute("index");
       this.list.splice(index,1)
       let doc_id = event.currentTarget.getAttribute("id")
-      console.log(doc_id);
       var newList = [];
       for (var k = 0; k < this.idList.length; k++) {
           if (doc_id != this.idList[k]) {
               newList.push(this.idList[k]);
           }
       }
-      console.log(newList);
 
       this.idList = newList;
 

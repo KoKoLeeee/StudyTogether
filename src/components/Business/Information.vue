@@ -227,12 +227,6 @@ export default {
     "vueper-slide": VueperSlide,
   },
 
-  watch: {
-    photoIndex: function () {
-      console.log(this.photoIndex);
-    },
-  },
-
   methods: {
     fetchID: async function () {
 
@@ -241,14 +235,12 @@ export default {
           var userID = user.uid;
           this.bizID = userID;
         }
-        console.log(this.bizID);
       });
     },
 
     fetchItems: async function () {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          console.log(this.bizID);
 
           database
             .collection("listings")
@@ -274,8 +266,6 @@ export default {
     },
 
     save: async function () {
-      console.log("name", this.name);
-      console.log(this.bizID);
       database.collection("listings").doc(this.bizID).update({
         loc_filter: this.region,
         loc_neighbourhood: this.neighbourhood,
@@ -287,9 +277,6 @@ export default {
         phoneNum: this.phoneNum,
         published: true,
       });
-      console.log("bizid", this.bizID);
-      console.log(this.name);
-      console.log(this.exact_loc);
       alert("Information sucessfully updated!");
       location.reload();
     },
@@ -304,11 +291,9 @@ export default {
 
     uploadPhotos: function (e) {
       this.photoData = e.target.files;
-      console.log(e.target.files);
 
       if (this.photoData.length > 0) {
         for (var i = 0; i < this.photoData.length; i++) {
-          console.log("hello");
           var imageData = this.photoData[i];
           const storageRef = firebase
             .storage()
@@ -327,13 +312,11 @@ export default {
               this.uploadValue = 100;
               storageRef.snapshot.ref.getDownloadURL().then((url) => {
                 this.photos.push(url);
-                console.log(this.photos);
               });
             }
           );
         }
       }
-      console.log(this.img);
     },
 
     deletePhoto: function () {
@@ -350,11 +333,9 @@ export default {
 
     uploadMenu: function (e) {
       this.photoData = e.target.files;
-      console.log(e.target.files);
 
       if (this.photoData.length > 0) {
         for (var i = 0; i < this.photoData.length; i++) {
-          console.log("hello");
           var imageData = this.photoData[i];
           const storageRef = firebase
             .storage()
@@ -373,13 +354,11 @@ export default {
               this.uploadValue = 100;
               storageRef.snapshot.ref.getDownloadURL().then((url) => {
                 this.menu.push(url);
-                console.log(this.menu);
               });
             }
           );
         }
       }
-      console.log(this.img);
     },
     deleteMenu: function () {
       if (this.menu.length > 0) {

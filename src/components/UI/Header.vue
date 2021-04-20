@@ -41,7 +41,6 @@ export default {
       firebase.auth().onAuthStateChanged(async user => {
         if (user) {
           this.userID = user.uid
-          console.log(this.userID)
           await database.collection('users').doc(user.uid).get().then(doc => {
             const data = doc.data()
             this.loggedIn = data.usertype;
@@ -54,6 +53,7 @@ export default {
     },
 
     signOut: function() {
+      this.$router.push('/')
       this.loggedIn = 'none';
       this.userID = "";
       firebase.auth().signOut().catch(err => console.log(err)).then(() => this.$router.push('/'))

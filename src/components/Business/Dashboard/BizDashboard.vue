@@ -159,7 +159,6 @@ export default {
 
         fetchID: async function () {
             var user = firebase.auth().currentUser;
-            console.log(user);
             var userID = user.uid;
             this.bizID = userID;
         },
@@ -273,7 +272,6 @@ export default {
             this.totalMonthlyBookings = monthlyBookings
             this.totalMonthlyRatings = monthlyRatings
             this.totalMonthlyClicks = monthlyClicks
-            console.log(this.totalMonthlyRevenue)
 
             // get datacollection to have values. 
             // labels will be months, data will be the totalspendings. 
@@ -392,8 +390,6 @@ export default {
 
             this.totalTimeRevenue = timeRevenue
             this.totalTimeBookings = timeBookings
-
-            console.log(this.totalTimeRevenue)
 
             // get datacollection to have values. 
             // labels will be months, data will be the totalspendings. 

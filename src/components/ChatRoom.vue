@@ -148,7 +148,6 @@ export default {
               const data = snapshot.data();
               this.usertype = data.usertype;
             });
-          console.log(this.usertype);
           var query = "";
           if (this.usertype == "customer") {
             query = "customerID";
@@ -164,12 +163,9 @@ export default {
                 let toAdd = doc.data();
                 let newDate = toAdd.last_date.toDate();
                 let item = { ...toAdd, ["id"]: doc.id, ["newDate"]: newDate };
-                console.log(newDate);
                 this.userlist.push(item);
               });
             });
-
-          console.log(this.userlist);
         }
       });
     },
@@ -178,7 +174,6 @@ export default {
       this.index = index;
       this.messages = [];
       let doc_id = event.currentTarget.getAttribute("id");
-      console.log(doc_id);
 
       await database
         .collection("chatrooms")
@@ -220,9 +215,6 @@ export default {
         message: this.text,
         newDate: new Date(),
       };
-      console.log(item);
-
-      console.log(this.userlist);
 
       await database
         .collection("chatrooms")
@@ -236,8 +228,6 @@ export default {
 
       this.messages.push(item);
       let itemToUpdate = this.userlist[this.index];
-      console.log(itemToUpdate);
-      console.log(itemToUpdate.newDate);
       itemToUpdate.newDate = item.newDate;
       itemToUpdate.last_message = item.message;
       if (this.usertype == "customer") {
@@ -246,15 +236,12 @@ export default {
         itemToUpdate.last_user = itemToUpdate.businessName;
       }
 
-      console.log(this.userlist);
-
       await database.collection("chatrooms").doc(this.chatroomID).update({
         last_date: item.newDate,
         last_message: this.text,
         last_user: itemToUpdate.last_user,
       });
 
-      console.log(this.messages);
       this.text = "";
       this.index = 0;
 
@@ -264,7 +251,6 @@ export default {
         },
         600
       );
-      console.log("helo");
     },
   },
 

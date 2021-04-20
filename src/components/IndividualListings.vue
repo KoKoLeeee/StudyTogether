@@ -341,9 +341,6 @@ export default {
   computed: {
     displayedList: function () {
       let tempList = this.reviews;
-      console.log(tempList);
-
-      console.log("computed");
 
       //sort method
       if (this.sortBy == "Date") {
@@ -356,7 +353,6 @@ export default {
       if (!this.ascending) {
         tempList.reverse();
       }
-      console.log(tempList);
       return tempList;
     },
   },
@@ -384,14 +380,10 @@ export default {
             const add = doc.data();
             let item = { ...add, ["newDate"]: add.date.toDate() };
             this.reviews.push(item);
-            console.log(this.reviews[0]);
           });
         });
 
-      console.log(this.listingDetails.photos);
       this.displayedList = this.reviews;
-
-      console.log(this.reviews);
     },
 
     bookPage: function () {
@@ -414,7 +406,6 @@ export default {
             .get()
             .then((snapshot) => {
               const userName = snapshot.data().name;
-              console.log(this.listingDetails);
 
               database
                 .collection("chatrooms")
@@ -450,10 +441,6 @@ export default {
                   }
 
                   querySnapshot.docs.forEach(async (docSnapshot) => {
-                    console.log("test");
-                    console.log(this.listingDetails.id);
-                    console.log(userID);
-                    console.log(docSnapshot.exists);
                     if (docSnapshot.exists) {
                       this.$router.push({ path: "/chat" });
                     } else {
@@ -480,9 +467,6 @@ export default {
 
   watch: {
     $route: "fetchItems",
-    sortBy: function () {
-      console.log(this.sortBy);
-    },
   },
 };
 </script>
