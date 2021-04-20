@@ -9,8 +9,6 @@
               v-on:click.prevent="show()"
               >Show My Statistics</b-button
             >
-        <!-- <button v-on:click.prevent ="show()">Show My Statistics</button>
-        <br><br> -->
         <div class="charts">
         <form v-if="isLoaded">
             Search Data By:
@@ -260,38 +258,6 @@ export default {
             }
 
             this.monthly.forEach(async function(doc) {
-                // timestamp
-                // let dateOfVisit = doc['date']
-                // timestamp into string
-                // let dateInString = dateOfVisit.toDate().toDateString()
-                // extract the month. E.g Apr
-                // let month = dateInString.slice(4,7)
-                // extract the year Eg 2021
-                // let year = dateInString.slice(9,)
-                // get listingId corresponding to this listing 
-                // let listingId = doc['location']
-                // let time = doc['time']
-                // get the sarting time. E.g 11 
-                // let start = Number(time[0].slice(0,2))
-                // get ending time. E.g 14
-                // let end = Number(time.pop().slice(-4,-2))
-                // duration. E.g 14 - 11 = 3 hours.
-                // let duration = end - start
-
-                /* retrieves the 'price' field which is the hourly rate of the listing
-                async function getPrice(listingId) {
-                    var price = 0
-                    await database.collection('listings').doc(listingId).get().then(doc => {
-                        let data = doc.data()
-                        price = data['price']
-                    })
-                    return price
-                }
-                // wait to get the rate
-                let hourlyRate = await getPrice(listingId)
-                // get total spending on this cafe
-                let totalSpending = duration * hourlyRate
-                */
 
                 var month = doc['month']
 

@@ -5,56 +5,20 @@
       <b-tab title="Edit General Information" active><div><information></information></div></b-tab>
       <b-tab title="Edit Timeslots"><div><timeslots></timeslots></div></b-tab>
     </b-tabs>
-    <!-- <div class="info">
-      Information
-      <br /><br />
-      <button v-on:click="route()">Edit General Information</button>
-    </div>
-    <br /><br />
-    <div class="booking-timings">
-      Edit Booking Timings
-      <button v-on:click="edit()">Edit Timeslots</button>
-      <br /><br />
-    </div> -->
   </div>
 </template>
 
 <script>
 import Header from "../UI/Header.vue";
-import firebase from "firebase";
 import Information from './Information.vue';
 import Timeslots from './EditTimeslots.vue';
 
 export default {
-  data() {
-    return {
-      bizID: "",
-    };
-  },
   components: {
     "app-header": Header,
     information: Information,
     timeslots: Timeslots,
-  },
-
-  methods: {
-    fetchID: function () {
-      var user = firebase.auth().currentUser;
-      console.log(user.uid);
-      var userID = user.uid;
-      this.bizID = userID;
-
-      //update how to get listing ID after biz login is done
-    },
-
-    route: function () {
-      this.$router.push({ name: "info", params: { id: this.bizID } });
-    },
-
-    edit: function () {
-      this.$router.push({ name: "edit", params: { id: this.bizID } });
-    },
-  },
+  }
 };
 </script>
 

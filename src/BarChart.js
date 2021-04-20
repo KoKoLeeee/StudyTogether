@@ -10,7 +10,6 @@ export default {
               legend: { display: false },
               title: {
                 display: true
-                // text: 'Total Monthly Spendings on Bookings'
               },
               responsive: true,
               maintainAspectRatio: false

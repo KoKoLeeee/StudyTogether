@@ -4,30 +4,22 @@
     <h1 class="subheader">Bookings</h1>
     <div class="full-container">
       <ul>
-        <!-- E.g bookings = ['dateObject', '18 Apr 2021', [ ['Jermaine',3,['0700 - 0800', '1300 - 1500']], ['Jared',5, ['1100 - 1200']] ] ] -->
         <div class="test">
           <li
             class="partial-container"
             v-for="booking in bookings"
             :key="booking.index"
           >
-            <!-- date of coming -->
-            <!-- E.g 18 Apr 2021  -->
             <div class="dates">
               <h3>{{ booking[1] }}</h3>
             </div>
-
-            <!-- iterations of all customers coming on that date -->
             <div class="test2">
               <ul>
-                <!-- booking[2] == [ ['Jermaine',3,['0700 - 0800', '1300 - 1500']], ['Jared',5, ['1100 - 1200']] ] -->
                 <li
                   class="customers"
                   v-for="customer in booking[2]"
                   :key="customer.index"
                 >
-                  <!-- customer name and pax -->
-                  <!-- 'Jermaine' (pax: 3) -->
                   <div class="customerName">
                     <b-icon icon="person" class="icons"></b-icon>
                     {{ customer[0] }} 
@@ -36,7 +28,6 @@
                       <b-icon icon="person-plus" class="icons"></b-icon> {{ customer[1] }}
                       </div>
                   <ul>
-                    <!-- customer[2] == ['0700 - 0800', '1300 - 1500'] -->
                     <div class="timeslots">
                         <b-icon icon="clock-history" class="icons"></b-icon>
                       <li class="indiv-timeslots" v-for="interval in customer[2]" :key="interval.index">&nbsp;{{ interval }} |
@@ -68,10 +59,6 @@ export default {
 
   methods: {
     getDoc: async function () {
-      // hardcode
-      // var userId = "fo2v2d2wA8Q2k3tXlt8hTxiRUcs2"
-
-      // CurrentUSer.uid == listing doc ID
       var userId = firebase.auth().currentUser.uid;
       var arr = [];
       await database
@@ -267,7 +254,6 @@ ul {
 }
 
 .customers {
-  /* display: flex; */
   padding-bottom: 10px;
   border-bottom: 1px dashed grey;
 }
@@ -297,65 +283,4 @@ ul {
 .indiv-timeslots {
     margin-top: auto;
 }
-/* #title {
-  position: relative;
-  text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 40px;
-}
-
-#mybizbookings {
-  font-size: 20px;
-}
-
-#mybizbookings ul {
-  list-style-type: none;
-}
-
-#mybizbookings li {
-  font-size: 25px;
-  border: 5px solid #d6d6d6;
-  border-radius: 25px;
-  height: 100%;
-  width: 45%;
-  padding: 10px;
-  margin: auto;
-  margin-bottom: 30px;
-  background-color: #ebebeb;
-}
-
-#mybizbookings #dateComing {
-  font-size: 30px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-#mybizbookings hr {
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
-  width: 90%;
-  height: 12px;
-  border: 0;
-  box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
-}
-
-#mybizbookings #customer {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 20px;
-  border: none;
-  height: 100%;
-  width: 70%;
-  padding: 5px;
-  margin: auto;
-  margin-bottom: 30px;
-  background-color: #ebebeb;
-}
-
-#customerName {
-  font-size: 22px;
-} */
 </style>

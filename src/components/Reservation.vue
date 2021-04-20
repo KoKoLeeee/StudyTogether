@@ -228,8 +228,6 @@ export default {
               const timeData = snapshot.data();
               currTData.push({time: snapshot.id, currTBookings: Number(timeData.bookings), currTRevenue: Number(timeData.revenue)})
               console.log("curr time bookings", "=>", timeData.bookings)
-              //  this.currTBookings = timeData.bookings
-              //  this.currTRevenue = timeData.revenue
             })
 
       }
@@ -293,22 +291,6 @@ export default {
               .update({
                 [time]: updatedValue,
               });
-
-            /*
-            database
-              .collection("listings")
-              .doc(locationID)
-              .collection("timeslotsData")
-              .doc(time)
-              .get()
-              .then((snapshot) => {
-                const timeData = snapshot.data();
-                this.currTData += {time: timeData.id, currTBookings: timeData.bookings, currTRevenue: timeData.revenue}
-                console.log("curr time bookigns", "=>", timeData.bookings)
-              //  this.currTBookings = timeData.bookings
-              //  this.currTRevenue = timeData.revenue
-              })
-              */
           }
         });
 
@@ -351,7 +333,6 @@ export default {
         bookings: Number(newMBookings),
         revenue: Number(newMRevenue)
       })
-      //.then(() => {console.log("help")});
       console.log("what's the issue2")
 
       var result2 = await this.updateTData()
@@ -493,21 +474,12 @@ select {
   margin: auto;
 }
 
-/* .float-left,
-.float-right {
-  flex: 1;
-  height: 100%;
-  overflow: auto;
-} */
 
 .float-left {
   width: 50%;
   float: left;
   align-items: left;
-  /* background-color: #ffffff; */
-  /* border-radius: 20px; */
   margin-left: 5px;
-  /* box-shadow: 0px 0px 10px 10px lightgrey; */
 }
 
 .float-right {
@@ -517,9 +489,6 @@ select {
   align-items: left;
   height: 60vh;
   border-left: 2px solid grey;
-  /* background-color: #ffffff; */
-  /* border-radius: 20px; */
-  /* box-shadow: 0px 0px 10px 10px lightgrey; */
 }
 
 .timeslot {

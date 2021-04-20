@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <app-header></app-hesader> -->
     <h1>Edit Booking Timings</h1>
 
     <div class="float-container">
@@ -36,14 +35,6 @@
               </b-input-group-append>
             </b-input-group>
             </div>
-
-            <!-- <input v-model.number="pax" placeholder="Input pax limit" />
-            <button v-on:click="update()">Update Pax</button> -->
-            <!-- <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
-              >Add Timeslots</b-button
-            >
-            <button v-on:click="selectAll()">Select All</button>
-            <button v-on:click="del()">Delete Timeslot</button> -->
           </div>
           <div v-else-if="dateSelected">
             <b-button variant="outline-primary" v-b-modal.modal-prevent-closing
@@ -51,29 +42,8 @@
             >
             <h3>No timeslots available</h3>
           </div>
-          <!-- <div v-else>Choose a date to start</div> -->
 
           <div>
-            <!-- <modal
-              v-show="isModalVisible"
-              @close="closeModal"
-              @apply="
-                closeModal();
-                add();
-              "
-            >
-              <template v-slot:header> New timeslots: </template>
-              <template v-slot:body>
-                <p><input v-model="start" placeholder="Start Time" /></p>
-                <p><input v-model="end" placeholder="End Time" /></p>
-                <p><input v-model.number="pax" placeholder="Pax limit" /></p>
-                <input
-                  type="checkbox"
-                  v-bind:value="true"
-                  v-model="applyMonth"
-                />Apply for the Month
-              </template>
-            </modal> -->
 
             <b-modal
               id="modal-prevent-closing"
@@ -88,17 +58,11 @@
                   v-model="start"
                   placeholder="Opening Time in HHMM format. Eg. 0000"
                 ></b-form-input>
-                <div>
-                  <!-- Selected: <strong>{{ start }}</strong> -->
-                </div>
                 <h4 class="subtitle">Closing Time</h4>
                 <b-form-input
                   v-model="end"
                   placeholder="Closing Time in HHMM format. Eg. 0000"
                 ></b-form-input>
-                <div>
-                  <!-- Selected: <strong>{{ end }}</strong> -->
-                </div>
 
                 <h4 class="subtitle">Maximum PAX</h4>
                 <b-form-input
@@ -107,7 +71,6 @@
                   placeholder="Maximum PAX"
                 ></b-form-input>
                 <div>
-                  <!-- Selected: <strong>{{ pax }}</strong> -->
                 </div>
                 <b-form-checkbox-group
                   class="checkgroup"
@@ -120,38 +83,6 @@
                   >
                 </b-form-checkbox-group>
 
-                <!-- <div>
-          <input type="checkbox" id="cheap" value="cheap" v-model="price" />
-          <label for="cheap"></label>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          <input type="checkbox" id="medium" value="medium" v-model="price" />
-          <label for="medium"> </label>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          <input
-            type="checkbox"
-            id="expensive"
-            value="expensive"
-            v-model="price"
-          />
-          <label for="expensive"></label>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          <b-icon icon="cash-stack" class="filter-cash"></b-icon>
-          </div> -->
-                <!-- <b-form-group
-          label="Name"
-          label-for="name-input"
-          invalid-feedback="Name is required"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="name"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group> -->
               </form>
             </b-modal>
           </div>
@@ -162,11 +93,9 @@
 </template>
 
 <script>
-// import Header from "../UI/Header.vue";
 import firebase from "firebase";
 import database from "../../firebase.js";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
-// import modal from "../Modal.vue";
 
 export default {
   data() {
@@ -182,15 +111,12 @@ export default {
       end: "",
       dateSelected: false,
       availableTime: false,
-      // isModalVisible: false,
       applyMonth: false,
     };
   },
 
   components: {
-    // "app-header": Header,
     "v-date-picker": DatePicker,
-    // modal: modal,
   },
 
   watch: {
@@ -208,7 +134,6 @@ export default {
           this.bizID = user.uid 
         }
       })
-      // this.bizID = firebase.auth().currentUser.uid;
     },
 
     selectAll: function () {
@@ -220,16 +145,11 @@ export default {
       }
     },
 
-    // showModal: function () {
-    //   this.isModalVisible = true;
-    // },
-
     closeModal: function () {
       this.isModalVisible = false;
     },
 
     fetch: function () {
-      //fetch the timeslots info
       if (this.date == undefined) {
         return;
       }
@@ -247,9 +167,7 @@ export default {
       this.fulldate = date + month + year;
       console.log(this.fulldate);
 
-      //this.bizID = this.$route.params.id;
       console.log("id: " + this.bizID);
-      //change after fetch
 
       database
         .collection("listings")
@@ -377,7 +295,6 @@ export default {
         }
 
         this.applyMonth = false;
-        // location.reload();
       } else {
         //add timeslot for the day
         var docRefDate = database
@@ -400,7 +317,6 @@ export default {
             }
           }
         });
-        // location.reload();
       }
     },
 
@@ -425,14 +341,12 @@ export default {
         docRef.update({
           [time]: updatedValue, //update the firebase
         });
-        // .then(() => location.reload());
       }
       this.pax = "";
       this.selected = new Array();
     },
 
     del: function () {
-      //gi timeslots
 
       if (this.selected.length == 0) {
         alert("Please select at least 1 timeslot");
@@ -454,7 +368,6 @@ export default {
         docRef.update({
           [time]: FieldValue.delete(), //delete field in firebase
         });
-        // .then(() => location.reload());
       }
       this.selected = new Array();
     },
@@ -543,14 +456,6 @@ select {
   margin: auto;
 }
 
-/* .float-left,
-.float-right {
-  flex: 1;
-  height: 100%;
-  width: 50%;
-  overflow: auto;
-} */
-
 .float-left {
   width: 50%;
   float: left;
@@ -558,8 +463,6 @@ select {
   margin: 0;
   margin-left: auto;
   height: 60vh;
-  /* padding: 20px; */
-  /* border: 2px; */
 }
 
 .float-right {

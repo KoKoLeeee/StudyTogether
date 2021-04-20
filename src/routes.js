@@ -12,8 +12,6 @@ import Reservation from './components/Reservation.vue';
 import MyBusiness from './components/Business/MyBusiness.vue';
 import BusinessSignup from './components/Business/BusinessSignup.vue';
 import BizBookings from './components/Business/Biz Bookings.vue';
-import Information from './components/Business/Information.vue';
-import EditTimeslots from './components/Business/EditTimeslots.vue';
 import BizDashboard from './components/Business/Dashboard/BizDashboard.vue'
 import ChatRoom from './components/ChatRoom.vue';
 

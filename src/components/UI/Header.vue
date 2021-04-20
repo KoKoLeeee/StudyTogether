@@ -56,7 +56,7 @@ export default {
     signOut: function() {
       this.loggedIn = 'none';
       this.userID = "";
-      firebase.auth().signOut().catch(err => console.log(err)).then(() => location.reload())
+      firebase.auth().signOut().catch(err => console.log(err)).then(() => this.$router.push('/'))
     }
   },
   
